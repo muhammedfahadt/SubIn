@@ -1,0 +1,17 @@
+{
+  "name": "Flutter Project Workspace",
+  "image": "://microsoft.com",
+  "features": {
+    "ghcr.io/amsoft-io/devcontainer-features/flutter:1": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart"
+      ]
+    }
+  }
+}
