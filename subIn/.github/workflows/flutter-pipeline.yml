@@ -220,7 +220,7 @@ jobs:
   #     - uses: actions/setup-java@v4
   #       with:
   #         distribution: 'temurin'
-  #         java-version: '17'
+  #         java-version: '17'5
   #     - run: flutter pub get
   #     - name: Decode Android keystore
   #       run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/keystore.jks
@@ -232,4 +232,4 @@ jobs:
   #     - uses: actions/upload-artifact@v4
   #       with:
   #         name: subin-android-release
-  #         path: frontend/build/app/outputs/bundle/release/app-release.aab
+  #         path: frontend/build/app/outputs/bundle/release/app-release.aab  
