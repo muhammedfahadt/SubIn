@@ -54,12 +54,12 @@ class AppTheme {
         primary: primaryColor,
         secondary: accentColor,
         surface: surface,
-        background: background,
+       // background: background,
         error: error,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: textPrimary,
-        onBackground: textPrimary,
+        //onBackground: textPrimary,
       ),
       textTheme: GoogleFonts.interTextTheme().copyWith(
         displayLarge: GoogleFonts.inter(

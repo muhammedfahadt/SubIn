@@ -1,4 +1,4 @@
-name: subIn
+name: sub_in
 description: Sports matchmaking platform - find venues, players, teams, and events
 
 publish_to: 'none'
@@ -59,10 +59,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.3
-  flutter_lints: ^3.0.0
   build_runner: ^2.4.8
   retrofit_generator: ^8.1.0
   json_serializable: ^6.7.1
+  flutter_lints: ^6.0.0
+
 
 flutter:
   uses-material-design: true

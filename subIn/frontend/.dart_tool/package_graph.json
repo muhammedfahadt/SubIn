@@ -1,10 +1,10 @@
 {
   "roots": [
-    "subIn"
+    "sub_in"
   ],
   "packages": [
     {
-      "name": "subIn",
+      "name": "sub_in",
       "version": "1.0.0+1",
       "dependencies": [
         "cached_network_image",
@@ -66,6 +66,13 @@
       "version": "4.1.2",
       "dependencies": [
         "talker_logger"
+      ]
+    },
+    {
+      "name": "flutter_lints",
+      "version": "6.0.0",
+      "dependencies": [
+        "lints"
       ]
     },
     {
@@ -140,13 +147,6 @@
         "watcher",
         "web_socket_channel",
         "yaml"
-      ]
-    },
-    {
-      "name": "flutter_lints",
-      "version": "3.0.2",
-      "dependencies": [
-        "lints"
       ]
     },
     {
@@ -445,6 +445,11 @@
         "ansicolor",
         "web"
       ]
+    },
+    {
+      "name": "lints",
+      "version": "6.1.0",
+      "dependencies": []
     },
     {
       "name": "source_helper",
@@ -820,11 +825,6 @@
     {
       "name": "args",
       "version": "2.7.0",
-      "dependencies": []
-    },
-    {
-      "name": "lints",
-      "version": "3.0.0",
       "dependencies": []
     },
     {
