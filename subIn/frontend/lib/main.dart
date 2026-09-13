@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:subIn/router/app_router.dart';
-import 'package:subIn/config/app_theme.dart';
-import 'package:subIn/config/app_constants.dart';
+import 'package:sub_in/router/app_router.dart';
+import 'package:sub_in/config/app_theme.dart';
+import 'package:sub_in/config/app_constants.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {

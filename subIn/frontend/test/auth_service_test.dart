@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 // Import your actual classes
-import 'package:subIn/services/auth_services.dart';
-import 'package:subIn/services/storage_service.dart';
+import 'package:sub_in/services/auth_services.dart';
+import 'package:sub_in/services/storage_service.dart';
 
 // 1. Create Mock classes
 class MockDio extends Mock implements Dio {}

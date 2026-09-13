@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/storage_service.dart';
-import '../services/auth_services.dart'; 
+import 'package:sub_in/services/storage_service.dart';
+import 'package:sub_in/services/auth_services.dart'; 
 
 
 // 1. Define the state (Keep it simple)
