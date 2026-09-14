@@ -3,16 +3,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_in/providers/auth_provider.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authNotifierProvider);
-    final emailController = TextEditingController(text:'admin@test.com');
-    final passwordController = TextEditingController(text: 'password');
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
 
-    // Listen for successful login to redirect
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: 'admin@test.com');
+    _passwordController = TextEditingController(text: 'password');
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authNotifierProvider);
+
     ref.listen<AsyncValue<AuthState>>(authNotifierProvider, (previous, next) {
       if (next.hasValue && next.value!.isLoggedIn) {
         context.go('/home');
@@ -30,19 +49,24 @@ class LoginScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(controller: emailController, decoration: const InputDecoration(labelText: 'Email')),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
             const SizedBox(height: 16),
-            TextField(controller: passwordController, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
             const SizedBox(height: 24),
-
-            // Clean loading state handling
             authState.isLoading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () {
                       ref.read(authNotifierProvider.notifier).login(
-                            emailController.text,
-                            passwordController.text,
+                            _emailController.text,
+                            _passwordController.text,
                           );
                     },
                     child: const Text('Login'),
