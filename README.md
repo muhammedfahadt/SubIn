@@ -76,7 +76,7 @@ curl -X POST http://localhost:8000/venues/ \
 | 🏆 **Team Building** | Form teams, recruit players, manage rosters |  |
 | 💬 **In-App Coordination** | Event/team chat for logistics |  |
 | 📍 **Geolocation** | PostGIS-powered nearby search with distance | ✅ |
-| 🔐 **JWT Auth** | Secure login/register with token refresh |  |
+| 🔐 **JWT Auth** | Secure login/register with token refresh | ✅ | 
 
 ---
 
