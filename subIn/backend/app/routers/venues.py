@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import text
-from typing import List
-from app.database import get_db
-from app.schemas import VenueResponse, VenueSearch,VenueCreate
-from app.dependencies import get_current_user
-from app.models import User,Venue
 
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database import get_db
+from app.dependencies import get_current_user
+from app.models import User, Venue
+from app.schemas import VenueCreate, VenueResponse
 
 router = APIRouter(prefix="/venues", tags=["Venues"])
 # ==========================================
@@ -15,8 +17,8 @@ router = APIRouter(prefix="/venues", tags=["Venues"])
 @router.post("/", response_model=VenueResponse, status_code=201)
 async def create_venue(
     venue_in: VenueCreate,                     # Pydantic validates this automatically
-    db: AsyncSession = Depends(get_db),        # Injects DB Session
-    current_user: User = Depends(get_current_user) # Injects Logged-in User
+    db: Annotated[AsyncSession, Depends(get_db)],        # Injects DB Session
+    current_user: Annotated[User, Depends(get_current_user)] # Injects Logged-in User
 ):
     """
     Java Equivalent: @PostMapping + @Valid @RequestBody VenueDTO
@@ -48,12 +50,12 @@ async def create_venue(
     # 4. Return Response (Pydantic converts ORM -> JSON)
     return db_venue
 
-@router.get("/nearby", response_model=List[VenueResponse])
+@router.get("/nearby", response_model=list[VenueResponse])
 async def get_nearby_venues(
-    lat: float = Query(..., description="User latitude"),
-    lon: float = Query(..., description="User longitude"),
-    radius_km: float = Query(10.0, description="Search radius"),
-    db: AsyncSession = Depends(get_db)
+    lat: Annotated[float, Query(..., description="User latitude")],
+    lon: Annotated[float, Query(..., description="User longitude")],
+    radius_km: Annotated[float, Query(description="Search radius")] = 10.0,*,
+    db: Annotated[AsyncSession, Depends(get_db)],
 ):
     # Using raw SQL with PostGIS ST_DWithin for performance
     # This is much faster than fetching all rows and calculating distance in Python
