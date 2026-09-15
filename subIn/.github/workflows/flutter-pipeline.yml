@@ -144,7 +144,7 @@ jobs:
       contents: read
       packages: write
     outputs:
-      image: ${{ steps.meta.outputs.tags }}
+      image: ${{ steps.meta.outputs.tags }} 
     steps:
       - uses: actions/checkout@v4
 
