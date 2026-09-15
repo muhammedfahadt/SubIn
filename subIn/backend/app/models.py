@@ -1,11 +1,13 @@
 import enum
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime,Text,Enum
-from geoalchemy2 import Geometry
-from app.database import Base
 from datetime import datetime
-from sqlalchemy.orm import relationship
 
-class SkillLevel(str, enum.Enum):
+from geoalchemy2 import Geometry
+from sqlalchemy import Boolean, Column, DateTime, Enum, Float, Integer, String, Text
+
+from app.database import Base
+
+
+class SkillLevel(enum.StrEnum):
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
