@@ -10,7 +10,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          // AsyncNotifierProvider.overrideWith takes () => Notifier, no ref param
           authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
         ],
         child: MaterialApp.router(
@@ -24,18 +23,24 @@ void main() {
       ),
     );
 
+    // ⬇️ CRITICAL: Wait for AsyncNotifier.build() to complete
+    // Otherwise authState.isLoading is true and button is hidden
+    await tester.pumpAndSettle();
+
+    // Now the button should be visible
     expect(find.byType(ElevatedButton), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
 
+    // Tap login
     await tester.tap(find.byType(ElevatedButton));
-    await tester.pump();
+    await tester.pump(); // Trigger loading state
 
+    // Button gone, loading shown
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.byType(ElevatedButton), findsNothing);
   });
 }
 
-// Must EXTEND AuthNotifier, not AsyncNotifier<AuthState>
 class FakeAuthNotifier extends AuthNotifier {
   @override
   Future<AuthState> build() async => const AuthState(isLoggedIn: false);
@@ -43,6 +48,6 @@ class FakeAuthNotifier extends AuthNotifier {
   @override
   Future<void> login(String email, String password) async {
     state = const AsyncValue.loading();
-    // Never complete — keeps loading visible for test
+    // Intentionally hang to keep loading visible
   }
 }
