@@ -2,10 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/providers/auth_provider.dart';
 import 'package:sub_in/screens/auth/login_screen.dart';
-import 'package:sub_in/screens/home/home_screen.dart';
 import 'package:sub_in/screens/splash_screen.dart';
-
-// import your screens here
+import 'package:sub_in/screens/venues/venue_map_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final isLoggedIn = ref.watch(authIsLoggedInProvider);
@@ -37,14 +35,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) =>  const LoginScreen(),
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) =>  const VenueMapScreen(),
         // Add nested routes here easily:
         // routes: [ GoRoute(path: 'settings', builder: ...) ]
       ),
     ],
   );
-});
+}
+);

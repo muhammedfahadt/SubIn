@@ -11,9 +11,8 @@ final nearbyVenuesProvider = FutureProvider.autoDispose<List<Venue>>((ref) async
   return locationAsync.when(
     data: (location) async {
       final venueService = ref.watch(venueServiceProvider);
-      return await venueService.getNearbyVenues(
-        latitude: location.latitude,
-        longitude: location.longitude,
+      return await venueService.fetchNearby(
+       location: location,
         radiusKm: 10.0,
       );
     },
