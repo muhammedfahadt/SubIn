@@ -26,10 +26,11 @@ dependencies:
   dio: ^5.4.0
   retrofit: ^4.1.0
 
-  # Location & Maps
-  google_maps_flutter: ^2.6.0
+  # Location & Maps (100% free - OpenStreetMap, no API key)
   geolocator: ^10.1.0
   geocoding: ^2.1.1
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
 
   # Auth
   flutter_secure_storage: ^9.0.0
@@ -49,6 +50,8 @@ dependencies:
   talker_flutter: ^4.1.2
   talker: ^4.1.2
   talker_dio_logger: ^4.9.3
+  freezed_annotation: ^3.1.0
+  google_maps_flutter: ^2.18.1
 
 dependency_overrides:
   talker: 4.1.2
