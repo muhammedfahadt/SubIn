@@ -1,6 +1,7 @@
 # tests/test_auth.py
 import pytest
 
+
 @pytest.mark.anyio
 async def test_login_returns_jwt(client, test_user):
     resp = await client.post("/auth/login", json={

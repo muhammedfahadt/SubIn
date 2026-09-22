@@ -1,16 +1,18 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.auth import create_access_token, get_password_hash, verify_password
 from app.database import get_db
 from app.models import User
-from app.schemas import UserCreate, UserLogin, Token, UserResponse
-from app.auth import get_password_hash, verify_password, create_access_token
-
+from app.schemas import Token, UserCreate, UserLogin, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register",response_model=Token)
-async def register(user_data:UserCreate, db: AsyncSession = Depends(get_db)):
+async def register(user_data:UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
     """
     Register a new user and return a JWT token.
     Java Equivalent: @PostMapping("/register") + @Valid @RequestBody UserDTO
@@ -42,7 +44,7 @@ async def register(user_data:UserCreate, db: AsyncSession = Depends(get_db)):
     )
 
 @router.post("/login",response_model=Token)
-async def login(credentials: UserLogin, db: AsyncSession = Depends(get_db)):
+async def login(credentials: UserLogin, db: Annotated[AsyncSession, Depends(get_db)]):
     """
     Login with email/password and return a JWT token.
     Java Equivalent: @PostMapping("/login") + AuthenticationManager.authenticate()
