@@ -1,13 +1,14 @@
-from pydantic import BaseModel, EmailStr, Field, ConfigDict,field_validator
-from typing import Optional, List
+import enum
 from datetime import datetime
-from enum import Enum
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
 
 # ==========================================
 # ENUMS (Like Java Enums or Dart Enums)
 # ==========================================
 # In Python, we inherit from (str, Enum) so they serialize directly to JSON strings.
-class SportType(str, Enum):
+class SportType(enum.StrEnum):
     FOOTBALL = "football"
     CRICKET = "cricket"
     BASKETBALL = "basketball"
@@ -21,7 +22,7 @@ class SportType(str, Enum):
     YOGA = "yoga"
     GYM = "gym"
     OTHER = "other"
-class SkillLevel(str, Enum):
+class SkillLevel(enum.StrEnum):
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -37,7 +38,7 @@ class UserCreate(BaseModel):
     password: str = Field(..., min_length=6, max_length=72)
     full_name: str = Field(..., min_length=2, max_length=100)
     # Optional[T] is like T? in Dart or @Nullable in Java
-    phone: Optional[str] = None
+    phone: str | None = None
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -47,16 +48,16 @@ class UserResponse(BaseModel):
     id: int
     email: str
     full_name: str
-    phone: Optional[str] = None
-    avatar_url: Optional[str] = None
-    latitude: Optional[float] = None
-    longitude: Optional[float] = None
+    phone: str | None = None
+    avatar_url: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
     # Provide safe defaults
-    preferred_sports: List[SportType] = []
+    preferred_sports: list[SportType] = []
     skill_level: SkillLevel = SkillLevel.INTERMEDIATE
 
-    bio: Optional[str] = None
+    bio: str | None = None
     is_available: bool = True
     looking_for_team: bool = False
     is_verified: bool = False
@@ -88,40 +89,40 @@ class UserResponse(BaseModel):
 # ==========================================
 class VenueCreate(BaseModel):
     name: str = Field(..., min_length=3)
-    description: Optional[str] = None
+    description: str | None = None
     address: str
     city: str
     latitude: float
     longitude: float
-    sports: List[SportType]
+    sports: list[SportType]
     has_lights: bool = False
     has_changing_room: bool = False
     has_parking: bool = False
     is_free: bool = True
-    price_per_hour: Optional[float] = None
-    phone: Optional[str] = None
-    website: Optional[str] = None
+    price_per_hour: float | None = None
+    phone: str | None = None
+    website: str | None = None
 
 class VenueResponse(BaseModel):
     id: int
     name: str
-    description: Optional[str] = None
+    description: str | None = None
     address: str
     city: str
     latitude: float
     longitude: float
-    sports: List[str] = []
+    sports: list[str] = []
     has_lights: bool = False
     has_changing_room: bool = False
     has_parking: bool = False
     is_free: bool = True
-    price_per_hour: Optional[float] = None
+    price_per_hour: float | None = None
     rating: float = 0.0
     review_count: int = 0          # ✅ Added default
-    phone: Optional[str] = None    # ✅ Added default
-    website: Optional[str] = None  # ✅ Added default
-    image_urls: List[str] = []     # ✅ Added default
-    distance_km: Optional[float] = None
+    phone: str | None = None    # ✅ Added default
+    website: str | None = None  # ✅ Added default
+    image_urls: list[str] = []     # ✅ Added default
+    distance_km: float | None = None
 
     # Pydantic V2 syntax to allow reading from SQLAlchemy objects
     model_config = ConfigDict(from_attributes=True)
@@ -146,7 +147,7 @@ class VenueSearch(BaseModel):
     latitude: float
     longitude: float
     radius_km: float = 10.0
-    sport: Optional[SportType] = None
+    sport: SportType | None = None
 
 # ==========================================
 # AUTH SCHEMAS

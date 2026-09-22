@@ -7,8 +7,8 @@ services:
       POSTGRES_USER: subIn
       POSTGRES_PASSWORD: subIn
       POSTGRES_DB: subIn
-   # volumes:
-      #- postgres_data:/var/lib/postgresql/data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -31,7 +31,7 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://subIn:subIn@db:5432/subIn
       - REDIS_URL=redis://redis:6379/0
-      - SECRET_KEY=your-production-secret-key-here
+      - SECRET_KEY=your-production-secret-key-here        
     depends_on:
       db:
         condition: service_healthy
