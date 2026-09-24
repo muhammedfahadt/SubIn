@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
-
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator 
 
 
 # ==========================================
