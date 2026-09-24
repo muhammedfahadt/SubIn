@@ -46,6 +46,7 @@ app.add_middleware(
 
 app.include_router(venues.router)
 app.include_router(auth.router)
+app.include_router(events.router)  # Add the events router
 
 @app.get("/")
 async def root():
