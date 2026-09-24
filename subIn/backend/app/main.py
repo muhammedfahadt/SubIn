@@ -8,7 +8,7 @@ from app.config import settings
 from app.database import Base, engine
 
 # Import our routers
-from app.routers import auth, venues
+from app.routers import auth, venues, events  # Import the events router
 
 
 @asynccontextmanager
