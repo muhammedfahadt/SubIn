@@ -1,18 +1,26 @@
-# Build stage
+FROM ghcr.io/cirruslabs/flutter:stable AS dev
+
+WORKDIR /app
+
+COPY pubspec.yaml ./
+RUN flutter pub get
+
+COPY . .
+
+EXPOSE 3000
+CMD ["flutter", "run", "-d", "web-server", "--web-port", "3000", "--host", "0.0.0.0"]
+
 FROM ghcr.io/cirruslabs/flutter:stable AS build
 
 WORKDIR /app
 
-# Copy pubspec and get dependencies
-COPY pubspec.yaml .
+COPY pubspec.yaml ./
 RUN flutter pub get
 
-# Copy source and build
 COPY . .
 RUN flutter build web --release
 
-# Serve stage
-FROM nginx:alpine
+FROM nginx:alpine AS prod
 COPY --from=build /app/build/web /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
