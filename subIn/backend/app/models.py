@@ -86,3 +86,64 @@ class User(Base):
     #event_participations = relationship("EventParticipant", back_populates="user")
     #team_memberships = relationship("TeamMember", back_populates="user")
     #sent_messages = relationship("ChatMessage", back_populates="sender")
+
+
+class Event(Base):
+    __tablename__ = "events"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(200), nullable=False)
+    description = Column(Text, nullable=True)
+    sport = Column(String(50), nullable=False)  # e.g., "football", "basketball"
+    
+    # Location: Either a venue OR custom coordinates
+    venue_id = Column(Integer, ForeignKey("venues.id"), nullable=True)
+    custom_location = Column(String(500), nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    
+    # For PostGIS queries (copy from venue or use custom)
+    location_geom = Column(Geometry("POINT", srid=4326), nullable=True)
+    
+    # Time
+    start_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime, nullable=False)
+    
+    # Players
+    max_players = Column(Integer, nullable=False, default=10)
+    min_players = Column(Integer, nullable=False, default=2)
+    current_players = Column(Integer, nullable=False, default=1)  # Organizer counts as 1
+    
+    # Cost
+    is_free = Column(Boolean, default=True)
+    cost_per_player = Column(Float, nullable=True)
+    
+    # Status
+    status = Column(String(20), nullable=False, default="open")  # open, full, in_progress, completed, cancelled
+    skill_level = Column(String(20), nullable=False, default="intermediate")
+    is_public = Column(Boolean, default=True)
+    fE
+    # Organizer
+    organizer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    venue = relationship("Venue", backref="events")
+    organizer = relationship("User", backref="organized_events")
+    participants = relationship("EventParticipant", back_populates="event", cascade="all, delete-orphan")
+
+
+class EventParticipant(Base):
+    __tablename__ = "event_participants"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    joined_at = Column(DateTime, default=datetime.utcnow)
+    status = Column(String(20), default="joined")  # joined, cancelled
+    
+    # Relationships
+    event = relationship("Event", back_populates="participants")
+    user = relationship("User", backref="event_participations")
