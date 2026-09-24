@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://subIn:subIn@db:5432/subIn"
-
+    DATABASE_URL: str = "postgresql+asyncpg://subIn:subIn@127.0.0.1:5432/subIn"
+ 
     # JWT
     SECRET_KEY: str = "your-super-secret-key-change-in-production"
     ALGORITHM: str = "HS256"

@@ -149,6 +149,50 @@ class VenueSearch(BaseModel):
     radius_km: float = 10.0
     sport: SportType | None = None
 
+class EventCreate(BaseModel):
+    title: str = Field(..., min_length=3, max_length=200)
+    description: Optional[str] = None
+    sport: SportType
+    venue_id: Optional[int] = None
+    custom_location: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    start_time: datetime
+    end_time: datetime
+    max_players: int = Field(default=10, ge=2, le=100)
+    min_players: int = Field(default=2, ge=2, le=50)
+    is_free: bool = True
+    cost_per_player: Optional[float] = None
+    skill_level: SkillLevel = SkillLevel.INTERMEDIATE
+    is_public: bool = True
+
+class EventResponse(BaseModel):
+    id: int
+    title: str
+    description: Optional[str]
+    sport: str
+    venue_id: Optional[int]
+    custom_location: Optional[str]
+    latitude: Optional[float]
+    longitude: Optional[float]
+    start_time: datetime
+    end_time: datetime
+    max_players: int
+    min_players: int
+    current_players: int
+    is_free: bool
+    cost_per_player: Optional[float]
+    status: str
+    skill_level: str
+    is_public: bool
+    organizer_id: int
+    organizer_name: str
+    created_at: datetime
+    distance_km: Optional[float] = None
+    spots_remaining: int = 0
+    
+    model_config = ConfigDict(from_attributes=True)    
+
 # ==========================================
 # AUTH SCHEMAS
 # ==========================================

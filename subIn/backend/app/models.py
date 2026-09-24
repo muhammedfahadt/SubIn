@@ -2,8 +2,8 @@ import enum
 from datetime import datetime
 
 from geoalchemy2 import Geometry
-from sqlalchemy import Boolean, Column, DateTime, Enum, Float, Integer, String, Text
-
+from sqlalchemy import Boolean, Column, DateTime, Enum, Float, Integer,ForeignKey, String, Text
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 
@@ -12,7 +12,7 @@ class SkillLevel(enum.StrEnum):
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
     PROFESSIONAL = "professional"  
-
+ 
 class Venue(Base):
     __tablename__ = "venues"
 
@@ -122,7 +122,7 @@ class Event(Base):
     status = Column(String(20), nullable=False, default="open")  # open, full, in_progress, completed, cancelled
     skill_level = Column(String(20), nullable=False, default="intermediate")
     is_public = Column(Boolean, default=True)
-    fE
+    
     # Organizer
     organizer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
