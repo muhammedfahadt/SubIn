@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/models/venue.dart';
+import 'package:sub_in/screens/events/map_location_picker.dart';
 import 'package:sub_in/services/venue_service.dart';
 import 'package:sub_in/providers/location_provider.dart';
 
@@ -39,9 +40,8 @@ class _VenueSelectorState extends ConsumerState<VenueSelector> {
     setState(() => _isLoading = true);
     try {
       final venueService = ref.read(venueServiceProvider);
-      _nearbyVenues = await venueService.getNearbyVenues(
-        latitude: location.latitude,
-        longitude: location.longitude,
+      _nearbyVenues = await venueService.fetchNearby(
+       location: location,
         radiusKm: 20.0,
       );
       setState(() => _isLoading = false);
