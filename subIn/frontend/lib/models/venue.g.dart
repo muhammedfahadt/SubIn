@@ -31,7 +31,7 @@ _Venue _$VenueFromJson(Map<String, dynamic> json) => _Venue(
           const [],
       distanceKm: (json['distance_km'] as num?)?.toDouble(),
     );
-                
+
 Map<String, dynamic> _$VenueToJson(_Venue instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

@@ -8,9 +8,9 @@ part 'venue.g.dart';
 abstract class Venue with _$Venue {
   const factory Venue({
     required int id,
-    required String name,
-    String? description,
-    required String address,
+    required String name,                                                   
+    String? description,                                                  
+    required String address,                                              
     required String city,
     required double latitude,
     required double longitude,
@@ -26,7 +26,7 @@ abstract class Venue with _$Venue {
     String? website,
     @JsonKey(name: 'image_urls') @Default([]) List<String> imageUrls,
     @JsonKey(name: 'distance_km') double? distanceKm,
-  }) = _Venue;
+  }) = _Venue;                  
 
-  factory Venue.fromJson(Map<String, dynamic> json) => _$VenueFromJson(json);
+  factory Venue.fromJson(Map<String, dynamic> json) => _$VenueFromJson(json);       
 }
