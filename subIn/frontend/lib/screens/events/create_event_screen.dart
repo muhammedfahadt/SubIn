@@ -5,8 +5,10 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/config/app_constants.dart';
+import 'package:sub_in/models/venue.dart';
 import 'package:sub_in/services/api_service.dart';
 import 'package:sub_in/providers/location_provider.dart';
+import 'package:sub_in/widgets/venue_selector.dart';
 
 class CreateEventScreen extends ConsumerStatefulWidget {
   const CreateEventScreen({super.key});
@@ -23,6 +25,7 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
   final _maxPlayersController = TextEditingController(text: '10');
   final _costController = TextEditingController();
 
+  Venue? _selectedVenue;
   String? _selectedSport;
   String _selectedSkillLevel = 'Intermediate';
   bool _isFree = true;
@@ -96,22 +99,13 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
               const SizedBox(height: 24),
 
               // Location
-              _buildSectionTitle('Location'),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _locationController,
-                decoration: const InputDecoration(
-                  labelText: 'Location',
-                  hintText: 'e.g., Central Park Courts',
-                  prefixIcon: Icon(Icons.location_on),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
-                  }
-                  return null;
-                },
-              ),
+         _buildSectionTitle('Location'),
+        const SizedBox(height: 12),
+        VenueSelector(
+          onVenueSelected: (venue) {
+            setState(() => _selectedVenue = venue);
+          },
+        ),
               const SizedBox(height: 24),
 
               // Date & Time
