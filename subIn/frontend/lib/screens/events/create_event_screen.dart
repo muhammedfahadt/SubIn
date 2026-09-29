@@ -321,6 +321,9 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
             ? null
             : _descriptionController.text,
         'sport': _selectedSport!.toLowerCase(),
+        'venue_id': _selectedVenue != null && _selectedVenue!.id > 0 
+      ? _selectedVenue!.id 
+      : null,
         'custom_location': _locationController.text,
         'latitude': location?.latitude,
         'longitude': location?.longitude,
