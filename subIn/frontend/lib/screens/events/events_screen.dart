@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/models/event.dart';
 import 'package:sub_in/providers/event_provider.dart';
@@ -32,7 +33,7 @@ class EventsScreen extends ConsumerWidget {
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/create-event'),
+        onPressed: () => context.push('/create-event'),
         backgroundColor: AppTheme.accentColor,
         icon: const Icon(Icons.add),
         label: const Text('Host Game'),
@@ -51,7 +52,7 @@ class EventsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/create-event'),
+            onPressed: () => context.push('/create-event'),
             child: const Text('Host a Game'),
           ),
         ],
