@@ -32,8 +32,10 @@ class EventService {
       }
 
       final response = await _api.get('/events/nearby', queryParams: queryParams);
-      final List<dynamic> data = response.data;
-      return data.map((json) => Event.fromJson(json)).toList();
+      final data = response.data as List;
+      return data
+          .map((json) => Event.fromJson(Map<String, dynamic>.from(json as Map)))
+          .toList();
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -42,7 +44,7 @@ class EventService {
   Future<Event> createEvent(Map<String, dynamic> eventData) async {
     try {
       final response = await _api.post('/events/', data: eventData);
-      return Event.fromJson(response.data);
+      return Event.fromJson(Map<String, dynamic>.from(response.data as Map));
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -50,7 +52,8 @@ class EventService {
 
    Future<void> joinEvent(int eventId) async {
     try {
-      await _api.post('/events/join', data: {'event_id': eventId});
+      // Backend route: POST /events/{event_id}/join (path param, no body)
+      await _api.post('/events/$eventId/join');
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -60,7 +63,7 @@ class EventService {
   Future<Event> getEvent(int eventId) async {
     try {
       final response = await _api.get('/events/$eventId');
-      return Event.fromJson(response.data);
+      return Event.fromJson(Map<String, dynamic>.from(response.data as Map));
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -68,10 +71,21 @@ class EventService {
   
 
   String _handleError(DioException e) {
-    if (e.response?.data != null && e.response!.data is Map) {
-      return e.response!.data['detail'] ?? 'Failed to fetch events';
+    final data = e.response?.data;
+    if (data != null && data is Map) {
+      final detail = data['detail'];
+      // FastAPI validation errors come as a list of {loc, msg} — stringify it.
+      if (detail is List) {
+        return detail
+            .map((d) => d is Map ? '${d['loc']?.last ?? 'field'}: ${d['msg']}' : '$d')
+            .join(', ');
+      }
+      if (detail != null) return detail.toString();
     }
-    return 'Network error. Please try again.';
+    if (e.response?.statusCode == 401) {
+      return 'Unauthorized (401): please log in again.';
+    }
+    return 'Network error (${e.response?.statusCode ?? 'no response'}). Please try again.';
   }
 
   
