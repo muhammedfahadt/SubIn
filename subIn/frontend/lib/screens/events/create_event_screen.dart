@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,8 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/config/app_constants.dart';
 import 'package:sub_in/models/venue.dart';
+import 'package:sub_in/providers/event_provider.dart';
 import 'package:sub_in/services/api_service.dart';
 import 'package:sub_in/providers/location_provider.dart';
+import 'package:sub_in/services/event_service.dart';
 import 'package:sub_in/widgets/venue_selector.dart';
 
 class CreateEventScreen extends ConsumerStatefulWidget {
@@ -312,45 +316,68 @@ class _CreateEventScreenState extends ConsumerState<CreateEventScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final api = ref.read(apiServiceProvider);
-      final location = ref.read(locationProvider).value;
+      final eventService = ref.read(eventServiceProvider);
 
-      await api.post('/events/', data: {
-        'title': _titleController.text,
+      // Fall back to GPS coords when no venue picked / map-picked virtual venue.
+      // Backend requires venue_id OR (latitude AND longitude).
+      final gps = ref.read(locationProvider).value;
+      final venueLat = _selectedVenue?.latitude;
+      final venueLon = _selectedVenue?.longitude;
+      final latitude = venueLat ?? gps?.latitude;
+      final longitude = venueLon ?? gps?.longitude;
+
+      if ((_selectedVenue == null ||
+              _selectedVenue!.id <= 0) &&
+          (latitude == null || longitude == null)) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please select a location')),
+          );
+          setState(() => _isLoading = false);
+        }
+        return;
+      }
+
+      final newEvent = await eventService.createEvent({
+        'title': _titleController.text.trim(),
         'description': _descriptionController.text.isEmpty
             ? null
-            : _descriptionController.text,
-        'sport': _selectedSport!.toLowerCase(),
-        'venue_id': _selectedVenue != null && _selectedVenue!.id > 0 
-      ? _selectedVenue!.id 
-      : null,
-        'custom_location': _locationController.text,
-        'latitude': location?.latitude,
-        'longitude': location?.longitude,
-        'start_time': _startDate!.toIso8601String(),
-        'end_time': _endDate!.toIso8601String(),
+            : _descriptionController.text.trim(),
+        'sport': _selectedSport!.toLowerCase().replaceAll(' ', '_'),
+        'venue_id':
+            _selectedVenue != null && _selectedVenue!.id > 0 ? _selectedVenue!.id : null,
+        // Backend needs a string here; venue name works for both real + virtual venues.
+        'custom_location': _selectedVenue?.name ??
+            (_locationController.text.trim().isEmpty
+                ? null
+                : _locationController.text.trim()),
+        'latitude': latitude,
+        'longitude': longitude,
+        'start_time': _startDate!.toUtc().toIso8601String(),
+        'end_time': _endDate!.toUtc().toIso8601String(),
         'max_players': int.parse(_maxPlayersController.text),
         'min_players': 2,
         'is_free': _isFree,
-        'cost_per_player': _isFree
-            ? null
-            : double.tryParse(_costController.text),
+        'cost_per_player': _isFree ? null : double.tryParse(_costController.text),
         'skill_level': _selectedSkillLevel.toLowerCase(),
         'is_public': true,
       });
 
       if (!mounted) return;
-      setState(() => _isLoading = false);
-      context.pop(true);
+      ref.invalidate(nearByEventsProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event created successfully!')),
+      );
+      // go_router screen was pushed via context.push — pop once via go_router.
+      context.pop(newEvent);
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: AppTheme.error,
-        ),
+        SnackBar(content: Text('Error: $e')),
       );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
