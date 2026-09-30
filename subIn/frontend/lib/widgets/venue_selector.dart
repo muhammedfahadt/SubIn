@@ -37,15 +37,20 @@ class _VenueSelectorState extends ConsumerState<VenueSelector> {
     final location = ref.read(locationProvider).value;
     if (location == null) return;
 
-    setState(() => _isLoading = true);
+    if (mounted) setState(() => _isLoading = true);
     try {
       final venueService = ref.read(venueServiceProvider);
-      _nearbyVenues = await venueService.fetchNearby(
-       location: location,
+      final venues = await venueService.fetchNearby(
+        location: location,
         radiusKm: 20.0,
       );
-      setState(() => _isLoading = false);
+      if (!mounted) return;
+      setState(() {
+        _nearbyVenues = venues;
+        _isLoading = false;
+      });
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
@@ -219,9 +224,10 @@ class _VenueSelectorState extends ConsumerState<VenueSelector> {
                           ? Text('${venue.distanceKm!.toStringAsFixed(1)} km')
                           : null,
                       onTap: () {
+                        if (!mounted) return;
                         setState(() => _selectedVenue = venue);
                         widget.onVenueSelected(venue);
-                        Navigator.pop(context);
+                        if (Navigator.canPop(context)) Navigator.pop(context);
                       },
                     );
                   },
@@ -241,6 +247,7 @@ class _VenueSelectorState extends ConsumerState<VenueSelector> {
     );
 
     if (result != null) {
+      if (!mounted) return;
       // Create a "virtual" venue from map selection
       final virtualVenue = Venue(
         id: -1, // Virtual
