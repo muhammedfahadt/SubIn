@@ -22,16 +22,24 @@ mixin _$Venue {
   double get latitude;
   double get longitude;
   List<String> get sports;
+  @JsonKey(name: 'has_lights')
   bool get hasLights;
+  @JsonKey(name: 'has_changing_room')
   bool get hasChangingRoom;
+  @JsonKey(name: 'has_parking')
   bool get hasParking;
+  @JsonKey(name: 'is_free')
   bool get isFree;
+  @JsonKey(name: 'price_per_hour')
   double? get pricePerHour;
   double get rating;
+  @JsonKey(name: 'review_count')
   int get reviewCount;
   String? get phone;
   String? get website;
+  @JsonKey(name: 'image_urls')
   List<String> get imageUrls;
+  @JsonKey(name: 'distance_km')
   double? get distanceKm;
 
   /// Create a copy of Venue
@@ -124,17 +132,17 @@ abstract mixin class $VenueCopyWith<$Res> {
       double latitude,
       double longitude,
       List<String> sports,
-      bool hasLights,
-      bool hasChangingRoom,
-      bool hasParking,
-      bool isFree,
-      double? pricePerHour,
+      @JsonKey(name: 'has_lights') bool hasLights,
+      @JsonKey(name: 'has_changing_room') bool hasChangingRoom,
+      @JsonKey(name: 'has_parking') bool hasParking,
+      @JsonKey(name: 'is_free') bool isFree,
+      @JsonKey(name: 'price_per_hour') double? pricePerHour,
       double rating,
-      int reviewCount,
+      @JsonKey(name: 'review_count') int reviewCount,
       String? phone,
       String? website,
-      List<String> imageUrls,
-      double? distanceKm});
+      @JsonKey(name: 'image_urls') List<String> imageUrls,
+      @JsonKey(name: 'distance_km') double? distanceKm});
 }
 
 /// @nodoc
@@ -352,17 +360,17 @@ extension VenuePatterns on Venue {
             double latitude,
             double longitude,
             List<String> sports,
-            bool hasLights,
-            bool hasChangingRoom,
-            bool hasParking,
-            bool isFree,
-            double? pricePerHour,
+            @JsonKey(name: 'has_lights') bool hasLights,
+            @JsonKey(name: 'has_changing_room') bool hasChangingRoom,
+            @JsonKey(name: 'has_parking') bool hasParking,
+            @JsonKey(name: 'is_free') bool isFree,
+            @JsonKey(name: 'price_per_hour') double? pricePerHour,
             double rating,
-            int reviewCount,
+            @JsonKey(name: 'review_count') int reviewCount,
             String? phone,
             String? website,
-            List<String> imageUrls,
-            double? distanceKm)?
+            @JsonKey(name: 'image_urls') List<String> imageUrls,
+            @JsonKey(name: 'distance_km') double? distanceKm)?
         $default, {
     required TResult orElse(),
   }) {
@@ -418,17 +426,17 @@ extension VenuePatterns on Venue {
             double latitude,
             double longitude,
             List<String> sports,
-            bool hasLights,
-            bool hasChangingRoom,
-            bool hasParking,
-            bool isFree,
-            double? pricePerHour,
+            @JsonKey(name: 'has_lights') bool hasLights,
+            @JsonKey(name: 'has_changing_room') bool hasChangingRoom,
+            @JsonKey(name: 'has_parking') bool hasParking,
+            @JsonKey(name: 'is_free') bool isFree,
+            @JsonKey(name: 'price_per_hour') double? pricePerHour,
             double rating,
-            int reviewCount,
+            @JsonKey(name: 'review_count') int reviewCount,
             String? phone,
             String? website,
-            List<String> imageUrls,
-            double? distanceKm)
+            @JsonKey(name: 'image_urls') List<String> imageUrls,
+            @JsonKey(name: 'distance_km') double? distanceKm)
         $default,
   ) {
     final _that = this;
@@ -482,17 +490,17 @@ extension VenuePatterns on Venue {
             double latitude,
             double longitude,
             List<String> sports,
-            bool hasLights,
-            bool hasChangingRoom,
-            bool hasParking,
-            bool isFree,
-            double? pricePerHour,
+            @JsonKey(name: 'has_lights') bool hasLights,
+            @JsonKey(name: 'has_changing_room') bool hasChangingRoom,
+            @JsonKey(name: 'has_parking') bool hasParking,
+            @JsonKey(name: 'is_free') bool isFree,
+            @JsonKey(name: 'price_per_hour') double? pricePerHour,
             double rating,
-            int reviewCount,
+            @JsonKey(name: 'review_count') int reviewCount,
             String? phone,
             String? website,
-            List<String> imageUrls,
-            double? distanceKm)?
+            @JsonKey(name: 'image_urls') List<String> imageUrls,
+            @JsonKey(name: 'distance_km') double? distanceKm)?
         $default,
   ) {
     final _that = this;
@@ -536,17 +544,17 @@ class _Venue implements Venue {
       required this.latitude,
       required this.longitude,
       required final List<String> sports,
-      this.hasLights = false,
-      this.hasChangingRoom = false,
-      this.hasParking = false,
-      this.isFree = true,
-      this.pricePerHour,
+      @JsonKey(name: 'has_lights') this.hasLights = false,
+      @JsonKey(name: 'has_changing_room') this.hasChangingRoom = false,
+      @JsonKey(name: 'has_parking') this.hasParking = false,
+      @JsonKey(name: 'is_free') this.isFree = true,
+      @JsonKey(name: 'price_per_hour') this.pricePerHour,
       this.rating = 0.0,
-      this.reviewCount = 0,
+      @JsonKey(name: 'review_count') this.reviewCount = 0,
       this.phone,
       this.website,
-      final List<String> imageUrls = const [],
-      this.distanceKm})
+      @JsonKey(name: 'image_urls') final List<String> imageUrls = const [],
+      @JsonKey(name: 'distance_km') this.distanceKm})
       : _sports = sports,
         _imageUrls = imageUrls;
   factory _Venue.fromJson(Map<String, dynamic> json) => _$VenueFromJson(json);
@@ -574,24 +582,25 @@ class _Venue implements Venue {
   }
 
   @override
-  @JsonKey()
+  @JsonKey(name: 'has_lights')
   final bool hasLights;
   @override
-  @JsonKey()
+  @JsonKey(name: 'has_changing_room')
   final bool hasChangingRoom;
   @override
-  @JsonKey()
+  @JsonKey(name: 'has_parking')
   final bool hasParking;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_free')
   final bool isFree;
   @override
+  @JsonKey(name: 'price_per_hour')
   final double? pricePerHour;
   @override
   @JsonKey()
   final double rating;
   @override
-  @JsonKey()
+  @JsonKey(name: 'review_count')
   final int reviewCount;
   @override
   final String? phone;
@@ -599,7 +608,7 @@ class _Venue implements Venue {
   final String? website;
   final List<String> _imageUrls;
   @override
-  @JsonKey()
+  @JsonKey(name: 'image_urls')
   List<String> get imageUrls {
     if (_imageUrls is EqualUnmodifiableListView) return _imageUrls;
     // ignore: implicit_dynamic_type
@@ -607,6 +616,7 @@ class _Venue implements Venue {
   }
 
   @override
+  @JsonKey(name: 'distance_km')
   final double? distanceKm;
 
   /// Create a copy of Venue
@@ -706,17 +716,17 @@ abstract mixin class _$VenueCopyWith<$Res> implements $VenueCopyWith<$Res> {
       double latitude,
       double longitude,
       List<String> sports,
-      bool hasLights,
-      bool hasChangingRoom,
-      bool hasParking,
-      bool isFree,
-      double? pricePerHour,
+      @JsonKey(name: 'has_lights') bool hasLights,
+      @JsonKey(name: 'has_changing_room') bool hasChangingRoom,
+      @JsonKey(name: 'has_parking') bool hasParking,
+      @JsonKey(name: 'is_free') bool isFree,
+      @JsonKey(name: 'price_per_hour') double? pricePerHour,
       double rating,
-      int reviewCount,
+      @JsonKey(name: 'review_count') int reviewCount,
       String? phone,
       String? website,
-      List<String> imageUrls,
-      double? distanceKm});
+      @JsonKey(name: 'image_urls') List<String> imageUrls,
+      @JsonKey(name: 'distance_km') double? distanceKm});
 }
 
 /// @nodoc
