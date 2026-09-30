@@ -57,7 +57,7 @@ class EventService {
   }
 
 
-Future<Event> getEvent(int eventId) async {
+  Future<Event> getEvent(int eventId) async {
     try {
       final response = await _api.get('/events/$eventId');
       return Event.fromJson(response.data);
@@ -73,4 +73,6 @@ Future<Event> getEvent(int eventId) async {
     }
     return 'Network error. Please try again.';
   }
+
+  
 }

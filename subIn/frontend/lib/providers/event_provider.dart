@@ -1,67 +1,62 @@
-import 'package:dio/dio.dart';
+
+
+
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/models/event.dart';
-import 'package:sub_in/services/api_service.dart';
+import 'package:sub_in/providers/location_provider.dart';
+import 'package:sub_in/services/event_service.dart';
 
-final eventServiceProvider = Provider<EventService>((ref) {
-  final api = ref.watch(apiServiceProvider);
-  return EventService(api);
+final nearByEventsProvider = FutureProvider.autoDispose<List<Event>>((ref)async{
+  final locationAsync = ref.watch(locationProvider);
+  return locationAsync.when(
+    data: (location) async {
+      final eventService = ref.watch(eventServiceProvider);
+      return await eventService.getNearbyEvents(
+        latitude: location.latitude,
+        longitude: location.longitude,
+        radiusKm: 10.0,
+      );
+    },
+    loading: () async => [],
+    error: (err, _) => throw err,
+ );});  
+
+/// Provider for creating events
+final createEventProvider = Provider<CreateEventNotifier>((ref) {
+  final eventService = ref.watch(eventServiceProvider);
+  return CreateEventNotifier(eventService);
 });
 
-class EventService {
-  final ApiService _api;
+class CreateEventNotifier {
+  final EventService _eventService;
 
-  EventService(this._api);
+  CreateEventNotifier(this._eventService);
 
-  /// Fetch nearby events
-  Future<List<Event>> getNearbyEvents({
-    required double latitude,
-    required double longitude,
-    double radiusKm = 10.0,
-    String? sport,
-  }) async {
-    try {
-      final Map<String, dynamic> queryParams = {
-        'lat': latitude,
-        'lon': longitude,
-        'radius_km': radiusKm,
-      };
-      
-      if (sport != null && sport.isNotEmpty) {
-        queryParams['sport'] = sport.toLowerCase();
-      }
-
-      final response = await _api.get('/events/nearby', queryParams: queryParams);
-      final List<dynamic> data = response.data;
-      return data.map((json) => Event.fromJson(json)).toList();
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-  Future<Event> createEvent(Map<String, dynamic> eventData) async {
-    try {
-      final response = await _api.post('/events/', data: eventData);
-      return Event.fromJson(response.data);
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-   Future<void> joinEvent(int eventId) async {
-    try {
-      await _api.post('/events/join', data: {'event_id': eventId});
-    } on DioException catch (e) {
-      throw _handleError(e);
-    }
-  }
-
-  
-
-  String _handleError(DioException e) {
-    if (e.response?.data != null && e.response!.data is Map) {
-      return e.response!.data['detail'] ?? 'Failed to fetch events';
-    }
-    return 'Network error. Please try again.';
+  Future<Event> create(Map<String, dynamic> eventData) async {
+    return await _eventService.createEvent(eventData);
   }
 }
+
+/// Provider for joining events
+final joinEventProvider = Provider<JoinEventNotifier>((ref) {
+  final eventService = ref.watch(eventServiceProvider);
+  return JoinEventNotifier(eventService);
+});
+
+class JoinEventNotifier {
+  final EventService _eventService;
+
+  JoinEventNotifier(this._eventService);
+
+  Future<void> join(int eventId) async {
+    await _eventService.joinEvent(eventId);
+  }
+}
+
+/// Provider for single event details
+final eventDetailProvider = FutureProvider.autoDispose.family<Event, int>((ref, eventId) async {
+  final eventService = ref.watch(eventServiceProvider);
+  return await eventService.getEvent(eventId);
+});
+ 
