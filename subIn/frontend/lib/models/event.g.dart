@@ -1,0 +1,59 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'event.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_Event _$EventFromJson(Map<String, dynamic> json) => _Event(
+      id: (json['id'] as num).toInt(),
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      sport: json['sport'] as String,
+      venueId: (json['venue_id'] as num?)?.toInt(),
+      customLocation: json['custom_location'] as String?,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      startTime: DateTime.parse(json['start_time'] as String),
+      endTime: DateTime.parse(json['end_time'] as String),
+      maxPlayers: (json['max_players'] as num).toInt(),
+      minPlayers: (json['min_players'] as num).toInt(),
+      currentPlayers: (json['current_players'] as num).toInt(),
+      isFree: json['is_free'] as bool,
+      costPerPlayer: (json['cost_per_player'] as num?)?.toDouble(),
+      status: json['status'] as String,
+      skillLevel: json['skill_level'] as String,
+      isPublic: json['is_public'] as bool,
+      organizerId: (json['organizer_id'] as num).toInt(),
+      organizerName: json['organizer_name'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      distanceKm: (json['distance_km'] as num?)?.toDouble(),
+      spotsRemaining: (json['spots_remaining'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$EventToJson(_Event instance) => <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'description': instance.description,
+      'sport': instance.sport,
+      'venue_id': instance.venueId,
+      'custom_location': instance.customLocation,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'start_time': instance.startTime.toIso8601String(),
+      'end_time': instance.endTime.toIso8601String(),
+      'max_players': instance.maxPlayers,
+      'min_players': instance.minPlayers,
+      'current_players': instance.currentPlayers,
+      'is_free': instance.isFree,
+      'cost_per_player': instance.costPerPlayer,
+      'status': instance.status,
+      'skill_level': instance.skillLevel,
+      'is_public': instance.isPublic,
+      'organizer_id': instance.organizerId,
+      'organizer_name': instance.organizerName,
+      'created_at': instance.createdAt.toIso8601String(),
+      'distance_km': instance.distanceKm,
+      'spots_remaining': instance.spotsRemaining,
+    };

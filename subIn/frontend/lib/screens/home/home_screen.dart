@@ -23,6 +23,25 @@ class HomeScreen extends ConsumerWidget {
               }
             },
           ),
+          IconButton(
+          icon: const Icon(Icons.add_location_alt_outlined),
+            onPressed: () {
+              // Navigate to the home screen
+               
+              context.go('/venues');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.event),
+            onPressed: () async {
+              final created = await context.push<bool>('/create-event');
+              if (created == true && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Event created successfully!')),
+                );
+              }
+            },
+          ),
         ],
       ),
       body: const Center(

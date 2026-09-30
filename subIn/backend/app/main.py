@@ -1,11 +1,15 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from app.config import settings
-from app.database import engine, Base
 from sqlalchemy import text
+
+from app.config import settings
+from app.database import Base, engine
+
 # Import our routers
-from app.routers import venues,auth
+from app.routers import auth, venues, events  # Import the events router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,6 +46,7 @@ app.add_middleware(
 
 app.include_router(venues.router)
 app.include_router(auth.router)
+app.include_router(events.router)  # Add the events router
 
 @app.get("/")
 async def root():
