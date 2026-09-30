@@ -5,11 +5,18 @@ import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/models/event.dart';
 import 'package:sub_in/providers/event_provider.dart';
 
-class EventsScreen extends ConsumerWidget {
+class EventsScreen extends ConsumerStatefulWidget {
   const EventsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<EventsScreen> createState() => _EventsScreenState();
+}
+
+class _EventsScreenState extends ConsumerState<EventsScreen> {
+  Event? _createdEvent;
+
+  @override
+  Widget build(BuildContext context) {
     // ✅ Now using typed Event objects
     final eventsAsync = ref.watch(nearByEventsProvider);
 
@@ -17,23 +24,38 @@ class EventsScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Events & Games')),
       body: eventsAsync.when(
         data: (events) {
-          if (events.isEmpty) {
+          final visibleEvents = [...events];
+          if (_createdEvent != null &&
+              !visibleEvents.any((event) => event.id == _createdEvent!.id)) {
+            visibleEvents.insert(0, _createdEvent!);
+          }
+          if (visibleEvents.isEmpty) {
             return _buildEmptyState(context);
           }
           return ListView.builder(
             padding: const EdgeInsets.all(16),
-            itemCount: events.length,
+            itemCount: visibleEvents.length,
             itemBuilder: (context, index) {
-              final event = events[index]; // ✅ Typed as Event, not dynamic
+              final event = visibleEvents[index];
               return _EventListCard(event: event);
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, _) => Center(child: Text('Error: $err')),
+        loading: () => _createdEvent == null
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(16),
+                children: [_EventListCard(event: _createdEvent!)],
+              ),
+        error: (err, _) => _createdEvent == null
+            ? Center(child: Text('Error: $err'))
+            : ListView(
+                padding: const EdgeInsets.all(16),
+                children: [_EventListCard(event: _createdEvent!)],
+              ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/create-event'),
+        onPressed: _openCreateEvent,
         backgroundColor: AppTheme.accentColor,
         icon: const Icon(Icons.add),
         label: const Text('Host Game'),
@@ -52,12 +74,19 @@ class EventsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           ElevatedButton(
-            onPressed: () => context.push('/create-event'),
+            onPressed: _openCreateEvent,
             child: const Text('Host a Game'),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _openCreateEvent() async {
+    final event = await context.push<Event>('/create-event');
+    if (!mounted || event == null) return;
+    setState(() => _createdEvent = event);
+    ref.invalidate(nearByEventsProvider);
   }
 }
 
@@ -68,7 +97,8 @@ class _EventListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sportColor = AppTheme.sportColors[event.sport] ?? AppTheme.primaryColor;
+    final sportColor =
+        AppTheme.sportColors[event.sport] ?? AppTheme.primaryColor;
     final spotsLeft = event.spotsRemaining ?? 0;
 
     return Container(
@@ -82,7 +112,9 @@ class _EventListCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ✅ Now you have full type safety
-          Text(event.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(event.title,
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Text('${event.currentPlayers}/${event.maxPlayers} players'),
           Text(event.customLocation ?? 'Location TBD'),
