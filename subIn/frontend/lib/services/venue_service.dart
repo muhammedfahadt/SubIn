@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sub_in/config/app_constants.dart';
 import 'package:sub_in/models/venue.dart';

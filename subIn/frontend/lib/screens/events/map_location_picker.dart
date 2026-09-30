@@ -42,7 +42,9 @@ class _MapLocationPickerScreenState extends ConsumerState<MapLocationPickerScree
           children: [
             GoogleMap(
               initialCameraPosition: CameraPosition(
-                target: location as LatLng,
+                // locationProvider uses latlong2 LatLng; GoogleMap needs
+                // google_maps_flutter LatLng — same shape, different type.
+                target: LatLng(location.latitude, location.longitude),
                 zoom: 14,
               ),
               myLocationEnabled: true,

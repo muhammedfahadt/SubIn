@@ -5,6 +5,7 @@ part 'event.g.dart';
 
 @freezed
 abstract class Event with _$Event {
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory Event({
     required int id,
     required String title,
