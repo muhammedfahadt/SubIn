@@ -108,7 +108,6 @@ async def create_event(
     
     return EventResponse(**response_data)
 
-
 @router.get("/nearby", response_model=List[EventResponse])
 async def get_nearby_events(
     lat: float = Query(..., description="Latitude"),
@@ -133,14 +132,15 @@ async def get_nearby_events(
             ) / 1000.0 as distance_km
         FROM events e
         JOIN users u ON e.organizer_id = u.id
-        WHERE e.status = 'open'
+        WHERE e.status::text = 'open'
           AND e.start_time > NOW()
           AND ST_DWithin(
               e.location_geom::geography,
               ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
               :radius_meters
           )
-          (:sport IS NULL OR e.sport = :sport)
+          -- ✅ FIX: Use CAST() instead of :: to avoid SQLAlchemy parser confusion
+          AND (CAST(:sport AS TEXT) IS NULL OR e.sport::text = CAST(:sport AS TEXT))
         ORDER BY e.start_time ASC
         LIMIT 50
     """)
@@ -158,11 +158,15 @@ async def get_nearby_events(
     events = []
     for row in result.mappings():
         event_dict = dict(row)
-        event_dict["spots_remaining"] = event_dict["max_players"] - event_dict["current_players"]
+        # ✅ Safe calculation to prevent TypeError if DB has NULL values
+        max_p = event_dict.get("max_players") or 0
+        current_p = event_dict.get("current_players") or 0
+        event_dict["spots_remaining"] = max_p - current_p
+        
         events.append(EventResponse(**event_dict))
     
     return events
-
+  
 
 @router.post("/{event_id}/join", response_model=EventResponse)
 async def join_event(
