@@ -71,12 +71,12 @@ curl -X POST http://localhost:8000/venues/ \
 | Feature | Description | Status |
 |---------|-------------|--------|
 | 🔍 **Venue Discovery** | Find sports grounds with maps, filters, ratings | ✅ |
-| 🎮 **Event Hosting** | Create games, set player limits, manage join requests |  |
+| 🎮 **Event Hosting** | Create games, set player limits, manage join requests | ✅ |
 | 👥 **Player Matchmaking** | Find nearby players by sport, skill level, availability |  |
 | 🏆 **Team Building** | Form teams, recruit players, manage rosters |  |
 | 💬 **In-App Coordination** | Event/team chat for logistics |  |
 | 📍 **Geolocation** | PostGIS-powered nearby search with distance | ✅ |
-| 🔐 **JWT Auth** | Secure login/register with token refresh |  |
+| 🔐 **JWT Auth** | Secure login/register with token refresh | ✅ | 
 
 ---
 
