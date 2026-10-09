@@ -24,6 +24,7 @@
         "google_maps_flutter",
         "image_picker",
         "intl",
+        "json_annotation",
         "latlong2",
         "lottie",
         "retrofit",
@@ -40,6 +41,7 @@
         "build_runner",
         "flutter_lints",
         "flutter_test",
+        "freezed",
         "json_serializable",
         "mocktail",
         "retrofit_generator"
@@ -72,6 +74,22 @@
       ]
     },
     {
+      "name": "freezed",
+      "version": "3.2.5",
+      "dependencies": [
+        "analyzer",
+        "build",
+        "build_config",
+        "collection",
+        "dart_style",
+        "freezed_annotation",
+        "json_annotation",
+        "meta",
+        "pub_semver",
+        "source_gen"
+      ]
+    },
+    {
       "name": "flutter_lints",
       "version": "6.0.0",
       "dependencies": [
@@ -80,13 +98,13 @@
     },
     {
       "name": "json_serializable",
-      "version": "6.8.0",
+      "version": "6.14.1",
       "dependencies": [
         "analyzer",
         "async",
         "build",
         "build_config",
-        "collection",
+        "dart_style",
         "json_annotation",
         "meta",
         "path",
@@ -98,7 +116,7 @@
     },
     {
       "name": "retrofit_generator",
-      "version": "8.2.1",
+      "version": "10.2.9",
       "dependencies": [
         "analyzer",
         "build",
@@ -108,13 +126,12 @@
         "dio",
         "protobuf",
         "retrofit",
-        "source_gen",
-        "tuple"
+        "source_gen"
       ]
     },
     {
       "name": "build_runner",
-      "version": "2.4.13",
+      "version": "2.15.1",
       "dependencies": [
         "analyzer",
         "args",
@@ -122,18 +139,17 @@
         "build",
         "build_config",
         "build_daemon",
-        "build_resolvers",
-        "build_runner_core",
-        "code_builder",
+        "built_collection",
+        "built_value",
         "collection",
+        "convert",
         "crypto",
         "dart_style",
-        "frontend_server_client",
         "glob",
         "graphs",
         "http_multi_server",
         "io",
-        "js",
+        "json_annotation",
         "logging",
         "meta",
         "mime",
@@ -141,12 +157,9 @@
         "path",
         "pool",
         "pub_semver",
-        "pubspec_parse",
         "shelf",
         "shelf_web_socket",
-        "stack_trace",
         "stream_transform",
-        "timing",
         "watcher",
         "web_socket_channel",
         "yaml"
@@ -282,18 +295,19 @@
     },
     {
       "name": "cached_network_image",
-      "version": "3.4.1",
+      "version": "4.0.3",
       "dependencies": [
         "cached_network_image_platform_interface",
         "cached_network_image_web",
         "flutter",
         "flutter_cache_manager",
+        "material_ui",
         "octo_image"
       ]
     },
     {
       "name": "intl",
-      "version": "0.19.0",
+      "version": "0.20.2",
       "dependencies": [
         "clock",
         "meta",
@@ -302,22 +316,24 @@
     },
     {
       "name": "go_router",
-      "version": "17.5.0",
+      "version": "18.0.2",
       "dependencies": [
         "collection",
+        "cupertino_ui",
         "flutter",
         "flutter_web_plugins",
         "logging",
+        "material_ui",
         "meta"
       ]
     },
     {
       "name": "flutter_secure_storage",
-      "version": "9.2.4",
+      "version": "10.3.4",
       "dependencies": [
         "flutter",
+        "flutter_secure_storage_darwin",
         "flutter_secure_storage_linux",
-        "flutter_secure_storage_macos",
         "flutter_secure_storage_platform_interface",
         "flutter_secure_storage_web",
         "flutter_secure_storage_windows",
@@ -351,24 +367,32 @@
     },
     {
       "name": "geocoding",
-      "version": "2.2.2",
+      "version": "5.0.0",
       "dependencies": [
         "flutter",
         "geocoding_android",
-        "geocoding_ios",
+        "geocoding_darwin",
         "geocoding_platform_interface"
       ]
     },
     {
       "name": "geolocator",
-      "version": "10.1.1",
+      "version": "14.0.2",
       "dependencies": [
         "flutter",
         "geolocator_android",
         "geolocator_apple",
+        "geolocator_linux",
         "geolocator_platform_interface",
         "geolocator_web",
         "geolocator_windows"
+      ]
+    },
+    {
+      "name": "json_annotation",
+      "version": "4.12.0",
+      "dependencies": [
+        "meta"
       ]
     },
     {
@@ -394,10 +418,11 @@
     },
     {
       "name": "flutter_riverpod",
-      "version": "2.6.1",
+      "version": "3.4.3",
       "dependencies": [
         "collection",
         "flutter",
+        "flutter_test",
         "meta",
         "riverpod",
         "state_notifier"
@@ -416,9 +441,10 @@
     },
     {
       "name": "shimmer",
-      "version": "3.0.0",
+      "version": "4.0.0",
       "dependencies": [
-        "flutter"
+        "flutter",
+        "material_ui"
       ]
     },
     {
@@ -431,7 +457,7 @@
     },
     {
       "name": "google_fonts",
-      "version": "6.3.3",
+      "version": "8.2.1",
       "dependencies": [
         "crypto",
         "flutter",
@@ -441,7 +467,7 @@
     },
     {
       "name": "cupertino_icons",
-      "version": "1.0.9",
+      "version": "2.0.0",
       "dependencies": []
     },
     {
@@ -484,45 +510,6 @@
       ]
     },
     {
-      "name": "lints",
-      "version": "6.1.0",
-      "dependencies": []
-    },
-    {
-      "name": "source_helper",
-      "version": "1.3.5",
-      "dependencies": [
-        "analyzer",
-        "collection",
-        "source_gen"
-      ]
-    },
-    {
-      "name": "source_gen",
-      "version": "1.5.0",
-      "dependencies": [
-        "analyzer",
-        "async",
-        "build",
-        "dart_style",
-        "glob",
-        "path",
-        "source_span",
-        "yaml"
-      ]
-    },
-    {
-      "name": "pubspec_parse",
-      "version": "1.6.0",
-      "dependencies": [
-        "checked_yaml",
-        "collection",
-        "json_annotation",
-        "pub_semver",
-        "yaml"
-      ]
-    },
-    {
       "name": "pub_semver",
       "version": "2.2.1",
       "dependencies": [
@@ -530,21 +517,38 @@
       ]
     },
     {
-      "name": "path",
-      "version": "1.9.1",
-      "dependencies": []
+      "name": "dart_style",
+      "version": "3.1.7",
+      "dependencies": [
+        "analyzer",
+        "args",
+        "collection",
+        "package_config",
+        "path",
+        "pub_semver",
+        "source_span",
+        "yaml"
+      ]
+    },
+    {
+      "name": "source_gen",
+      "version": "4.2.4",
+      "dependencies": [
+        "analyzer",
+        "async",
+        "build",
+        "dart_style",
+        "glob",
+        "path",
+        "pub_semver",
+        "source_span",
+        "yaml"
+      ]
     },
     {
       "name": "meta",
       "version": "1.18.0",
       "dependencies": []
-    },
-    {
-      "name": "json_annotation",
-      "version": "4.9.0",
-      "dependencies": [
-        "meta"
-      ]
     },
     {
       "name": "collection",
@@ -553,41 +557,29 @@
     },
     {
       "name": "build_config",
-      "version": "1.1.2",
+      "version": "1.3.3",
       "dependencies": [
         "checked_yaml",
         "json_annotation",
         "path",
-        "pubspec_parse",
-        "yaml"
+        "pubspec_parse"
       ]
     },
     {
       "name": "build",
-      "version": "2.4.1",
+      "version": "4.0.7",
       "dependencies": [
         "analyzer",
-        "async",
-        "convert",
         "crypto",
         "glob",
         "logging",
-        "meta",
         "package_config",
         "path"
       ]
     },
     {
-      "name": "async",
-      "version": "2.13.1",
-      "dependencies": [
-        "collection",
-        "meta"
-      ]
-    },
-    {
       "name": "analyzer",
-      "version": "6.4.1",
+      "version": "10.2.0",
       "dependencies": [
         "_fe_analyzer_shared",
         "collection",
@@ -604,29 +596,49 @@
       ]
     },
     {
-      "name": "protobuf",
-      "version": "3.1.0",
+      "name": "lints",
+      "version": "6.1.0",
+      "dependencies": []
+    },
+    {
+      "name": "source_helper",
+      "version": "1.3.13",
+      "dependencies": [
+        "analyzer",
+        "source_gen"
+      ]
+    },
+    {
+      "name": "pubspec_parse",
+      "version": "1.6.0",
+      "dependencies": [
+        "checked_yaml",
+        "collection",
+        "json_annotation",
+        "pub_semver",
+        "yaml"
+      ]
+    },
+    {
+      "name": "path",
+      "version": "1.9.1",
+      "dependencies": []
+    },
+    {
+      "name": "async",
+      "version": "2.13.1",
       "dependencies": [
         "collection",
-        "fixnum",
         "meta"
       ]
     },
     {
-      "name": "tuple",
-      "version": "2.0.2",
-      "dependencies": []
-    },
-    {
-      "name": "dart_style",
-      "version": "2.3.6",
+      "name": "protobuf",
+      "version": "6.1.0",
       "dependencies": [
-        "analyzer",
-        "args",
         "collection",
-        "path",
-        "pub_semver",
-        "source_span"
+        "fixnum",
+        "meta"
       ]
     },
     {
@@ -674,23 +686,9 @@
       ]
     },
     {
-      "name": "timing",
-      "version": "1.0.2",
-      "dependencies": [
-        "json_annotation"
-      ]
-    },
-    {
       "name": "stream_transform",
       "version": "2.1.2",
       "dependencies": []
-    },
-    {
-      "name": "stack_trace",
-      "version": "1.12.1",
-      "dependencies": [
-        "path"
-      ]
     },
     {
       "name": "shelf_web_socket",
@@ -739,13 +737,6 @@
       "dependencies": []
     },
     {
-      "name": "js",
-      "version": "0.6.7",
-      "dependencies": [
-        "meta"
-      ]
-    },
-    {
       "name": "io",
       "version": "1.1.0",
       "dependencies": [
@@ -780,14 +771,6 @@
       ]
     },
     {
-      "name": "frontend_server_client",
-      "version": "4.0.0",
-      "dependencies": [
-        "async",
-        "path"
-      ]
-    },
-    {
       "name": "crypto",
       "version": "3.0.7",
       "dependencies": [
@@ -795,47 +778,20 @@
       ]
     },
     {
-      "name": "build_runner_core",
-      "version": "7.3.2",
+      "name": "convert",
+      "version": "3.1.2",
       "dependencies": [
-        "async",
-        "build",
-        "build_config",
-        "build_resolvers",
-        "collection",
-        "convert",
-        "crypto",
-        "glob",
-        "graphs",
-        "json_annotation",
-        "logging",
-        "meta",
-        "package_config",
-        "path",
-        "pool",
-        "timing",
-        "watcher",
-        "yaml"
+        "typed_data"
       ]
     },
     {
-      "name": "build_resolvers",
-      "version": "2.4.2",
+      "name": "built_value",
+      "version": "8.13.0",
       "dependencies": [
-        "analyzer",
-        "async",
-        "build",
+        "built_collection",
         "collection",
-        "convert",
-        "crypto",
-        "graphs",
-        "logging",
-        "package_config",
-        "path",
-        "pool",
-        "pub_semver",
-        "stream_transform",
-        "yaml"
+        "fixnum",
+        "meta"
       ]
     },
     {
@@ -912,6 +868,13 @@
       "name": "vector_math",
       "version": "2.2.0",
       "dependencies": []
+    },
+    {
+      "name": "stack_trace",
+      "version": "1.12.1",
+      "dependencies": [
+        "path"
+      ]
     },
     {
       "name": "clock",
@@ -1240,6 +1203,19 @@
       ]
     },
     {
+      "name": "material_ui",
+      "version": "1.2.0",
+      "dependencies": [
+        "collection",
+        "cupertino_ui",
+        "flutter",
+        "flutter_localizations",
+        "intl",
+        "material_color_utilities",
+        "vector_math"
+      ]
+    },
+    {
       "name": "octo_image",
       "version": "2.1.0",
       "dependencies": [
@@ -1264,25 +1240,37 @@
     },
     {
       "name": "cached_network_image_web",
-      "version": "1.3.1",
+      "version": "2.0.2",
       "dependencies": [
         "cached_network_image_platform_interface",
         "flutter",
         "flutter_cache_manager",
+        "material_ui",
         "web"
       ]
     },
     {
       "name": "cached_network_image_platform_interface",
-      "version": "4.1.1",
+      "version": "5.0.2",
       "dependencies": [
         "flutter",
-        "flutter_cache_manager"
+        "flutter_cache_manager",
+        "material_ui"
+      ]
+    },
+    {
+      "name": "cupertino_ui",
+      "version": "1.0.2",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "flutter_localizations",
+        "intl"
       ]
     },
     {
       "name": "flutter_secure_storage_windows",
-      "version": "3.1.2",
+      "version": "4.1.0",
       "dependencies": [
         "ffi",
         "flutter",
@@ -1294,36 +1282,36 @@
     },
     {
       "name": "flutter_secure_storage_web",
-      "version": "1.2.1",
+      "version": "2.1.1",
       "dependencies": [
         "flutter",
         "flutter_secure_storage_platform_interface",
         "flutter_web_plugins",
-        "js"
+        "web"
       ]
     },
     {
       "name": "flutter_secure_storage_platform_interface",
-      "version": "1.1.2",
+      "version": "2.1.1",
       "dependencies": [
         "flutter",
         "plugin_platform_interface"
       ]
     },
     {
-      "name": "flutter_secure_storage_macos",
-      "version": "3.1.3",
+      "name": "flutter_secure_storage_linux",
+      "version": "3.0.3",
       "dependencies": [
         "flutter",
         "flutter_secure_storage_platform_interface"
       ]
     },
     {
-      "name": "flutter_secure_storage_linux",
-      "version": "1.2.3",
+      "name": "flutter_secure_storage_darwin",
+      "version": "0.3.2",
       "dependencies": [
         "flutter",
-        "flutter_secure_storage_platform_interface"
+        "plugin_platform_interface"
       ]
     },
     {
@@ -1367,28 +1355,42 @@
       "dependencies": []
     },
     {
-      "name": "geocoding_ios",
-      "version": "2.3.0",
+      "name": "geocoding_darwin",
+      "version": "1.0.3",
       "dependencies": [
         "flutter",
-        "geocoding_platform_interface"
+        "geocoding_platform_interface",
+        "plugin_platform_interface"
       ]
     },
     {
       "name": "geocoding_android",
-      "version": "3.3.1",
+      "version": "5.1.0",
       "dependencies": [
         "flutter",
-        "geocoding_platform_interface"
+        "geocoding_platform_interface",
+        "meta"
       ]
     },
     {
       "name": "geocoding_platform_interface",
-      "version": "3.2.0",
+      "version": "5.0.0",
       "dependencies": [
         "flutter",
         "meta",
         "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "geolocator_linux",
+      "version": "0.2.4",
+      "dependencies": [
+        "dbus",
+        "flutter",
+        "geoclue",
+        "geolocator_platform_interface",
+        "gsettings",
+        "package_info_plus"
       ]
     },
     {
@@ -1401,11 +1403,12 @@
     },
     {
       "name": "geolocator_web",
-      "version": "2.2.1",
+      "version": "4.1.4",
       "dependencies": [
         "flutter",
         "flutter_web_plugins",
-        "geolocator_platform_interface"
+        "geolocator_platform_interface",
+        "web"
       ]
     },
     {
@@ -1418,7 +1421,7 @@
     },
     {
       "name": "geolocator_android",
-      "version": "4.6.2",
+      "version": "5.0.4",
       "dependencies": [
         "flutter",
         "geolocator_platform_interface",
@@ -1465,12 +1468,17 @@
     },
     {
       "name": "riverpod",
-      "version": "2.6.1",
+      "version": "3.4.3",
       "dependencies": [
+        "async",
+        "clock",
         "collection",
+        "listen",
         "meta",
         "stack_trace",
-        "state_notifier"
+        "state_notifier",
+        "test_api",
+        "uuid"
       ]
     },
     {
@@ -1585,33 +1593,17 @@
       ]
     },
     {
-      "name": "convert",
-      "version": "3.1.2",
-      "dependencies": [
-        "typed_data"
-      ]
-    },
-    {
       "name": "_fe_analyzer_shared",
-      "version": "67.0.0",
+      "version": "96.0.0",
       "dependencies": [
-        "meta"
+        "meta",
+        "source_span"
       ]
     },
     {
       "name": "fixnum",
       "version": "1.1.1",
       "dependencies": []
-    },
-    {
-      "name": "built_value",
-      "version": "8.13.0",
-      "dependencies": [
-        "built_collection",
-        "collection",
-        "fixnum",
-        "meta"
-      ]
     },
     {
       "name": "string_scanner",
@@ -1747,6 +1739,15 @@
       ]
     },
     {
+      "name": "flutter_localizations",
+      "version": "0.0.0",
+      "dependencies": [
+        "flutter",
+        "intl",
+        "path"
+      ]
+    },
+    {
       "name": "sqflite",
       "version": "2.4.4",
       "dependencies": [
@@ -1773,6 +1774,39 @@
       "version": "3.0.0",
       "dependencies": [
         "unicode"
+      ]
+    },
+    {
+      "name": "gsettings",
+      "version": "0.2.8",
+      "dependencies": [
+        "dbus",
+        "xdg_directories"
+      ]
+    },
+    {
+      "name": "geoclue",
+      "version": "0.1.1",
+      "dependencies": [
+        "dbus",
+        "meta"
+      ]
+    },
+    {
+      "name": "dbus",
+      "version": "0.7.15",
+      "dependencies": [
+        "args",
+        "ffi",
+        "meta",
+        "xml"
+      ]
+    },
+    {
+      "name": "listen",
+      "version": "1.0.1",
+      "dependencies": [
+        "meta"
       ]
     },
     {
@@ -1897,6 +1931,15 @@
       ]
     },
     {
+      "name": "xml",
+      "version": "7.0.1",
+      "dependencies": [
+        "collection",
+        "meta",
+        "petitparser"
+      ]
+    },
+    {
       "name": "hooks",
       "version": "2.0.2",
       "dependencies": [
@@ -1940,6 +1983,14 @@
       "name": "simple_sparse_list",
       "version": "0.1.4",
       "dependencies": []
+    },
+    {
+      "name": "petitparser",
+      "version": "7.0.2",
+      "dependencies": [
+        "collection",
+        "meta"
+      ]
     },
     {
       "name": "record_use",

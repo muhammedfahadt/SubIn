@@ -8,9 +8,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.dependencies import get_current_user
 from app.models import User, Venue
-from app.schemas import VenueCreate, VenueResponse
+from app.schemas import VenueCreate, VenueResponse   
 
-router = APIRouter(prefix="/venues", tags=["Venues"])
+router = APIRouter(prefix="/venues", tags=["Venues"])   
 # ==========================================
 # ENDPOINT 1: CREATE VENUE (Protected)
 # ==========================================
