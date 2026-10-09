@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models import Event, EventParticipant, User, Venue
 from app.schemas import EventCreate, EventResponse
 from app.dependencies import get_current_user
+from app.schemas import ParticipantResponse
 
 router = APIRouter(prefix="/events", tags=["Events"])
 
@@ -108,7 +109,6 @@ async def create_event(
     
     return EventResponse(**response_data)
 
-
 @router.get("/nearby", response_model=List[EventResponse])
 async def get_nearby_events(
     lat: float = Query(..., description="Latitude"),
@@ -133,14 +133,15 @@ async def get_nearby_events(
             ) / 1000.0 as distance_km
         FROM events e
         JOIN users u ON e.organizer_id = u.id
-        WHERE e.status = 'open'
+        WHERE e.status::text = 'open'
           AND e.start_time > NOW()
           AND ST_DWithin(
               e.location_geom::geography,
               ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
               :radius_meters
           )
-          (:sport IS NULL OR e.sport = :sport)
+          -- ✅ FIX: Use CAST() instead of :: to avoid SQLAlchemy parser confusion
+          AND (CAST(:sport AS TEXT) IS NULL OR e.sport::text = CAST(:sport AS TEXT))
         ORDER BY e.start_time ASC
         LIMIT 50
     """)
@@ -158,10 +159,44 @@ async def get_nearby_events(
     events = []
     for row in result.mappings():
         event_dict = dict(row)
-        event_dict["spots_remaining"] = event_dict["max_players"] - event_dict["current_players"]
+        # ✅ Safe calculation to prevent TypeError if DB has NULL values
+        max_p = event_dict.get("max_players") or 0
+        current_p = event_dict.get("current_players") or 0
+        event_dict["spots_remaining"] = max_p - current_p
+        
         events.append(EventResponse(**event_dict))
     
     return events
+  
+
+@router.get("/{event_id}", response_model=EventResponse)
+async def get_event(
+    event_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Get single event by id with organizer + distance-free payload"""
+    query = text("""
+        SELECT
+            e.id, e.title, e.description, e.sport, e.venue_id, e.custom_location,
+            e.latitude, e.longitude, e.start_time, e.end_time,
+            e.max_players, e.min_players, e.current_players,
+            e.is_free, e.cost_per_player, e.status, e.skill_level, e.is_public,
+            e.organizer_id, e.created_at,
+            u.full_name as organizer_name,
+            NULL::float as distance_km
+        FROM events e
+        JOIN users u ON e.organizer_id = u.id
+        WHERE e.id = :event_id
+    """)
+    result = await db.execute(query, {"event_id": event_id})
+    row = result.mappings().first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Event not found")
+    event_dict = dict(row)
+    max_p = event_dict.get("max_players") or 0
+    current_p = event_dict.get("current_players") or 0
+    event_dict["spots_remaining"] = max_p - current_p
+    return EventResponse(**event_dict)
 
 
 @router.post("/{event_id}/join", response_model=EventResponse)
@@ -246,3 +281,33 @@ async def join_event(
     }
     
     return EventResponse(**response_data)
+
+
+@router.get("/{event_id}/participants", response_model=List[ParticipantResponse])
+async def get_event_participants(
+    event_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get all participants for an event"""
+    
+    query = text("""
+        SELECT 
+            ep.user_id,
+            u.full_name,
+            u.avatar_url,
+            u.skill_level::text as skill_level,
+            ep.joined_at
+        FROM event_participants ep
+        JOIN users u ON ep.user_id = u.id
+        WHERE ep.event_id = :event_id
+          AND ep.status = 'joined'
+        ORDER BY ep.joined_at ASC
+    """)
+    
+    result = await db.execute(query, {"event_id": event_id})
+    
+    participants = []
+    for row in result.mappings():
+        participants.append(ParticipantResponse(**dict(row)))
+    
+    return participants

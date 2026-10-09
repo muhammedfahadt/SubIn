@@ -73,6 +73,52 @@ class AuthService {
     }
   }
 
+  Future<void> register(String email, String password, String name, {String? phone}) async {
+    AppLogger.info('📝 Registration attempt initiated', {'email': email, 'name': name});
+
+    try {
+      final response = await _dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          'full_name': name,
+          if (phone != null && phone.isNotEmpty) 'phone': phone,
+        },
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        )).timeout(const Duration(seconds: 10));
+
+      AppLogger.info('📦 Registration response received', {'data': response.data});
+
+      // Optionally, you can auto-login after registration
+      final data = response.data as Map<String, dynamic>;
+      final token = data['access_token'] ?? data['token'];
+      
+      if (token != null && token is String && token.isNotEmpty) {
+        await _storageService.saveToken(token);
+        AppLogger.info('✅ Registration successful and token saved', {'email': email});
+      } else {
+        AppLogger.warning('⚠️ Registration successful but no token returned', {'email': email});
+      }
+    } on DioException catch (e, stackTrace) {
+      AppLogger.error(
+        '❌ Registration failed',
+        e,
+        stackTrace,
+      );
+
+      final errorMessage = (e.response?.data as Map<String, dynamic>?)?['error'] ??
+                           (e.response?.data as Map<String, dynamic>?)?['message'] ??
+                           'Registration failed. Please try again.';
+
+      throw Exception(errorMessage);
+    } catch (e, stackTrace) {
+       AppLogger.critical('💥 Unexpected registration error', e, stackTrace);
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
+
   Future<void> logout() async {
     // Optional: Call backend to invalidate token on server-side
     AppLogger.info('🚪 User logged out');

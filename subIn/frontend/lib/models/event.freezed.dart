@@ -592,7 +592,8 @@ extension EventPatterns on Event {
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _Event implements Event {
   const _Event(
       {required this.id,

@@ -42,6 +42,13 @@ class HomeScreen extends ConsumerWidget {
               }
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.event_available),
+            onPressed: () {
+              // Navigate to the home screen
+              context.go('/events/event-id'); // Replace 'event-id' with the actual event ID you want to view
+            },
+          ),
         ],
       ),
       body: const Center(

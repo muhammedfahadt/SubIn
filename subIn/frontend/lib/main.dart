@@ -7,17 +7,22 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
 
-  // 👇 Initialize Sentry for production crash reporting
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = 'https://03bd81240306a9eff839e21b88e77640@o4512020928921600.ingest.de.sentry.io/4512021032927312';
+  // Sentry DSN via --dart-define (never hardcode secrets).
+  // flutter run --dart-define=SENTRY_DSN=... --dart-define=ENVIRONMENT=development
+  const sentryDsn = String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+
+  if (sentryDsn.isNotEmpty) {
+    // 👇 Initialize Sentry for production crash reporting
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = sentryDsn;
 
       // Only send errors to Sentry in production
       options.environment = const String.fromEnvironment(
         'ENVIRONMENT',
         defaultValue: 'development',
       );
-         options.debug = true; // 👈 CRITICAL: Prints to console to prove it's trying to send
+         options.debug = true; 
 
 
       // Don't send PII (Personally Identifiable Information)
@@ -29,9 +34,17 @@ Future<void> main() async {
       const ProviderScope(
         child: GameOnApp(),
       ),
-    ); Sentry.captureMessage("✅ Sentry is successfully connected to Flutter!");
-    }
+    );
+    },
   );
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+    runApp(
+      const ProviderScope(
+        child: GameOnApp(),
+      ),
+    );
+  }
 }
 
 class GameOnApp extends ConsumerWidget {
@@ -42,7 +55,7 @@ class GameOnApp extends ConsumerWidget {
     // Watch the router provider. If auth state changes, the router
     // automatically re-evaluates the `redirect` logic.
     final router = ref.watch(appRouterProvider);
-
+    
     return MaterialApp.router(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,

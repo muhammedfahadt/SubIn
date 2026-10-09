@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/models/event.dart';
+import 'package:sub_in/models/participant.dart';
 import 'package:sub_in/services/api_service.dart';
 
 final eventServiceProvider = Provider<EventService>((ref) {
@@ -50,10 +51,11 @@ class EventService {
     }
   }
 
-   Future<void> joinEvent(int eventId) async {
+   Future<Event> joinEvent(int eventId) async {
     try {
       // Backend route: POST /events/{event_id}/join (path param, no body)
-      await _api.post('/events/$eventId/join');
+      final response = await _api.post('/events/$eventId/join');
+      return Event.fromJson(response.data);
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -68,6 +70,28 @@ class EventService {
       throw _handleError(e);
     }
   }
+
+  /// Get event details (with participants)
+Future<Map<String, dynamic>> getEventDetails(int eventId) async {
+  try {
+    // Get event
+    final eventResponse = await _api.get('/events/$eventId');
+    final event = Event.fromJson(Map<String, dynamic>.from(eventResponse.data as Map));
+    
+    // Get participants (we'll add this endpoint next)
+    final participantsResponse = await _api.get('/events/$eventId/participants');
+    final participants = (participantsResponse.data as List)
+        .map((json) => Participant.fromJson(Map<String, dynamic>.from(json as Map)))
+        .toList();
+    
+    return {
+      'event': event,
+      'participants': participants,
+    };
+  } on DioException catch (e) {
+    throw _handleError(e);
+  }
+}
   
 
   String _handleError(DioException e) {
