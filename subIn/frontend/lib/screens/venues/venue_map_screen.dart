@@ -137,9 +137,8 @@ class _VenueMapScreenState extends ConsumerState<VenueMapScreen> {
       children: [
         // 100% free tiles, no API key. Dark tiles to match your theme.
         TileLayer(
-          urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-          subdomains: const ['a', 'b', 'c', 'd'],
-          userAgentPackageName: 'com.subin.app',
+         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.gameon.app',
         ),
         MarkerLayer(
           markers: [

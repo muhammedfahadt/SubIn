@@ -8,7 +8,7 @@ from app.config import settings
 from app.database import Base, engine
 
 # Import our routers
-from app.routers import auth, venues, events  # Import the events router
+from app.routers import auth, venues, events  
 
 
 @asynccontextmanager
@@ -33,11 +33,13 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS for Flutter web
+# CORS for Flutter web (dev: allow any localhost port, e.g. http://localhost:51585)
+# NOTE: allow_origins=["*"] + allow_credentials=True is invalid — browsers
+# drop the header in that combo. Use allow_origin_regex to echo the origin.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Restrict in production
-    allow_credentials=True,
+    allow_origin_regex=r"http://localhost.*|http://127\.0\.0\.1.*",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

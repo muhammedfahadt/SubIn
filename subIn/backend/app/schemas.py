@@ -1,5 +1,5 @@
 import enum
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator 
 
@@ -166,6 +166,27 @@ class EventCreate(BaseModel):
     skill_level: SkillLevel = SkillLevel.INTERMEDIATE
     is_public: bool = True
 
+    @field_validator('start_time', 'end_time', mode='before')
+    @classmethod
+    def normalize_to_naive_utc(cls, v):
+        # DB columns are TIMESTAMP WITHOUT TIME ZONE -> asyncpg needs naive.
+        # Accept '2026-10-06T09:19:00Z' (aware) or '2026-10-06T09:19:00' (naive)
+        # and always store naive UTC so behavior is identical.
+        if isinstance(v, str) and v.endswith('Z'):
+            v = v[:-1] + '+00:00'
+        if isinstance(v, datetime) and v.tzinfo is not None:
+            return v.astimezone(timezone.utc).replace(tzinfo=None)
+        # If Pydantic hasn't parsed yet and it's a string with offset, parse then strip
+        if isinstance(v, str):
+            try:
+                dt = datetime.fromisoformat(v)
+                if dt.tzinfo is not None:
+                    return dt.astimezone(timezone.utc).replace(tzinfo=None)
+                return dt
+            except ValueError:
+                return v
+        return v
+
 class EventResponse(BaseModel):
     id: int
     title: str
@@ -192,6 +213,16 @@ class EventResponse(BaseModel):
     spots_remaining: int = 0
     
     model_config = ConfigDict(from_attributes=True)    
+
+
+class ParticipantResponse(BaseModel):
+    user_id: int
+    full_name: str
+    avatar_url: Optional[str] = None
+    skill_level: str
+    joined_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)
 
 # ==========================================
 # AUTH SCHEMAS

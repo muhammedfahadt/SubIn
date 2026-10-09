@@ -31,6 +31,16 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       return const AuthState(isLoggedIn: true);
     });
   }
+  Future<void> register(String email, String password, String name, {String? phone}) async {
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      final authService = ref.read(authServiceProvider);
+      await authService.register(email, password, name, phone: phone);
+
+      return const AuthState(isLoggedIn: true);
+    });
+  }
 
   Future<void> logout() async {
     state = const AsyncValue.loading();

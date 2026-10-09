@@ -1,0 +1,207 @@
+# ============================================================
+# SubIn — Root .gitignore (git root: d:\Git\project)
+# Generated from subIn/gameon-project.md stack:
+# subIn/backend/ (Python FastAPI + SQLAlchemy + PostGIS + Alembic + Redis + Pytest)
+# subIn/frontend/ (Flutter Web + Riverpod + Dio + google_maps + build_runner)
+# docker-compose.yml (Postgres/PostGIS + Redis + Backend + Nginx)
+# NOTE: code lives in subIn/, so all patterns are prefixed with subIn/
+# A copy is also kept at subIn/.gitignore for editors opening subIn/ directly.
+# ============================================================
+
+# ---------- OS ----------
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# ---------- Git / Editors ----------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.nbattrs
+
+# ---------- Env / Secrets — NEVER commit ----------
+# subIn/backend/app/config.py loads `.env` via pydantic-settings
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.jks
+secrets/
+serviceAccount.json
+google-services.json
+GoogleService-Info.plist
+firebase_options.dart
+subIn/backend/.env
+subIn/backend/.env.*
+
+# ---------- Docker / Compose ----------
+# DB data volume from docker-compose.yml `postgres_data:/var/lib/postgresql/data`
+postgres_data/
+data/db/
+*.sql.dump
+*.backup
+docker-compose.override.yml
+subIn/postgres_data/
+
+# ---------- Python / FastAPI Backend ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+ENV/
+subIn/backend/venv/
+subIn/backend/.venv/
+subIn/backend/env/
+pip-wheel-metadata/
+*.egg-info/
+*.egg
+.eggs/
+dist/
+build/
+develop-eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-log.txt
+pip-delete-this-directory.txt
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+htmlcov/
+.pytest_cache/
+subIn/backend/.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+tox/
+.nox/
+pytestdebug.log
+
+# Alembic — keep migrations, ignore pycache
+subIn/backend/alembic/__pycache__/
+subIn/backend/app/__pycache__/
+subIn/backend/app/routers/__pycache__/
+
+# Uvicorn / Gunicorn reload + logs
+*.log
+logs/
+uvicorn.log
+
+# Redis dump from local dev
+dump.rdb
+
+# ---------- Flutter Frontend ----------
+# Standard Flutter ignores
+subIn/frontend/.dart_tool/
+subIn/frontend/.flutter-plugins
+subIn/frontend/.flutter-plugins-dependencies
+subIn/frontend/.packages
+subIn/frontend/build/
+subIn/frontend/.pub-cache/
+subIn/frontend/.pub/
+subIn/frontend/version
+pubspec.lock
+# For apps keep lock — uncomment next line if you want to ignore:
+# subIn/frontend/pubspec.lock
+
+# Flutter generated — KEEP *.g.dart / *.freezed.dart in git (needed for models/event.dart etc.)
+# Uncomment below ONLY if you want to regenerate always via build_runner:
+# *.g.dart
+# *.freezed.dart
+
+# Flutter web build output + nginx serve stage (frontend/Dockerfile)
+subIn/frontend/build/
+subIn/frontend/.flutter_build/
+# Dart incremental compiler cache — the 103MB blocker you hit
+*.dill
+*.track.dill
+subIn/frontend/build/**
+
+# Dart / Flutter test + coverage
+subIn/frontend/coverage/
+subIn/frontend/test/*.mocks.dart
+
+# Android
+subIn/frontend/android/.gradle/
+subIn/frontend/android/captures/
+subIn/frontend/android/gradlew
+subIn/frontend/android/gradlew.bat
+subIn/frontend/android/local.properties
+subIn/frontend/android/**/generated/
+subIn/frontend/android/app/build/
+subIn/frontend/android/app/*.jks
+subIn/frontend/android/key.properties
+*.keystore
+
+# iOS / macOS
+subIn/frontend/ios/Flutter/Generated.xcconfig
+subIn/frontend/ios/Flutter/flutter_export_environment.sh
+subIn/frontend/ios/Pods/
+subIn/frontend/ios/.symlinks/
+subIn/frontend/ios/Flutter/App.framework
+subIn/frontend/ios/Flutter/Flutter.framework
+subIn/frontend/ios/Flutter/Flutter.podspec
+subIn/frontend/macos/Flutter/GeneratedPluginRegistrant.swift
+subIn/frontend/macos/Pods/
+subIn/frontend/macos/**/xcuserdata/
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM/
+
+# Windows / Linux Flutter desktop
+subIn/frontend/windows/flutter/generated_plugin_registrant.cc
+subIn/frontend/linux/flutter/generated_plugin_registrant.cc
+
+# Chrome device tool cache seen in your repo (frontend/.dart_tool/chrome-device/)
+subIn/frontend/.dart_tool/chrome-device/
+
+# Assets that should NOT be committed if local only
+subIn/frontend/assets/cache/
+
+# Sentry / Talker debug dumps
+sentry-debug-meta.properties
+
+# ---------- Node (for nginx.conf tooling / frontend web tooling if any) ----------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+subIn/frontend/web/node_modules/
+
+# ---------- Misc ----------
+*.tmp
+*.temp
+*.bak
+*.orig
+.cache/
+tmp/
+temp/
