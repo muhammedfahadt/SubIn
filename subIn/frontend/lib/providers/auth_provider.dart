@@ -6,7 +6,8 @@ import 'package:sub_in/services/auth_services.dart';
 // 1. Define the state (Keep it simple)
 class AuthState {
   final bool isLoggedIn;
-  const AuthState({required this.isLoggedIn});
+  final String? userName;
+  const AuthState({required this.isLoggedIn, this.userName});
 }
 
 // 2. The AsyncNotifier
@@ -16,7 +17,11 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     // Runs ONCE when the app starts. Perfect for checking existing tokens.
     final storage = ref.read(storageServiceProvider);
     final token = await storage.getToken();
-    return AuthState(isLoggedIn: token != null && token.isNotEmpty);
+    final userName = await storage.getUserName();
+    return AuthState(
+      isLoggedIn: token != null && token.isNotEmpty,
+      userName: userName,
+    );
   }
 
   Future<void> login(String email, String password) async {
@@ -26,9 +31,10 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
      final authService = ref.read(authServiceProvider);
           await authService.login(email, password);
+      final userName = await ref.read(storageServiceProvider).getUserName();
 
 
-      return const AuthState(isLoggedIn: true);
+      return AuthState(isLoggedIn: true, userName: userName);
     });
   }
   Future<void> register(String email, String password, String name, {String? phone}) async {
@@ -37,8 +43,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
       final authService = ref.read(authServiceProvider);
       await authService.register(email, password, name, phone: phone);
+      final userName = await ref.read(storageServiceProvider).getUserName();
 
-      return const AuthState(isLoggedIn: true);
+      return AuthState(isLoggedIn: true, userName: userName);
     });
   }
 
