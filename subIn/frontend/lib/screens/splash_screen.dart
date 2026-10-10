@@ -18,7 +18,7 @@ class SplashScreen extends ConsumerWidget {
           if (state.isLoggedIn) {
             context.go('/home');
           } else {
-            context.go('/login');
+            context.go('/landing');
           }
         });
         return const Scaffold(
