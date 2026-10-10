@@ -83,7 +83,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   controller: _nameController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.person_outline),
-                    hintText: 'Alex Rivera',
+                    hintText: 'Muhammed Fahad ',
                   ),
                   validator: (value) => (value == null || value.length < 2)
                       ? 'Name must be at least 2 characters'
@@ -98,7 +98,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email_outlined),
-                    hintText: 'alex.rivera@gmail.com',
+                    hintText: 'fahad.102@gmail.com',
                   ),
                   validator: (value) {
                     if (value == null || !value.contains('@')) {
