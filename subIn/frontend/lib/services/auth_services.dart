@@ -35,6 +35,7 @@ class AuthService {
       AppLogger.info('📦 Response received', {'data': response.data});
 
       final data = response.data as Map<String, dynamic>;
+      await _saveUserName(data['user']);
       
       // Extract token - handle both direct and nested structures
       final token = data['access_token'] ?? data['token'];
@@ -93,6 +94,7 @@ class AuthService {
 
       // Optionally, you can auto-login after registration
       final data = response.data as Map<String, dynamic>;
+      await _saveUserName(data['user']);
       final token = data['access_token'] ?? data['token'];
       
       if (token != null && token is String && token.isNotEmpty) {
@@ -124,6 +126,15 @@ class AuthService {
     AppLogger.info('🚪 User logged out');
     // await http.post(Uri.parse('$baseUrl/api/v1/auth/logout'), headers: {'Authorization': 'Bearer ${await _storageService.getToken()}'});
     await _storageService.clearToken();
+  }
+
+  Future<void> _saveUserName(dynamic user) async {
+    if (user is Map && user['full_name'] is String) {
+      final name = (user['full_name'] as String).trim();
+      if (name.isNotEmpty) {
+        await _storageService.saveUserName(name);
+      }
+    }
   }
 
   Future<bool> isAuthenticated() async {
