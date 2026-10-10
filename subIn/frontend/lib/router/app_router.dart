@@ -58,6 +58,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
+        path: '/events',
+        builder: (context, state) => const EventsScreen(),
+      ),
+      GoRoute(
         path: '/venues',
         builder: (context, state) => const VenueMapScreen(),
       ),
