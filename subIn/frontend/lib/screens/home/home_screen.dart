@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_in/providers/auth_provider.dart'; // Adjust path if needed
+import 'package:sub_in/providers/event_provider.dart';
+import 'package:sub_in/screens/home/home_sport_filter_provider.dart';
 import 'package:sub_in/screens/home/widgets/events_preview_section.dart';
 import 'package:sub_in/screens/home/widgets/home_bottom_nav.dart';
+import 'package:sub_in/screens/home/widgets/home_empty_state.dart';
 import 'package:sub_in/screens/home/widgets/home_header.dart';
 import 'package:sub_in/screens/home/widgets/home_stats_strip.dart';
 import 'package:sub_in/screens/home/widgets/host_game_card.dart';
@@ -15,9 +18,17 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final eventsAsync = ref.watch(nearByEventsProvider);
+    final selectedSport = ref.watch(homeSelectedSportProvider);
+    final showEmptyState = eventsAsync.maybeWhen(
+      data: (events) => events
+          .where((e) => homeSportMatchesEvent(e.sport, selectedSport))
+          .isEmpty,
+      orElse: () => false,
+    );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        
         actions: [
           IconButton(
             tooltip: 'Logout',
@@ -80,6 +91,10 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             const SportFilterChips(),
             const SizedBox(height: 16),
+            if (showEmptyState) ...[
+              const HomeEmptyStateCard(),
+              const SizedBox(height: 16),
+            ],
             const EventsPreviewSection(),
             const SizedBox(height: 16),
             const VenuesPreviewSection(),
