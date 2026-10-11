@@ -1,26 +1,26 @@
-
-
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/models/event.dart';
 import 'package:sub_in/providers/location_provider.dart';
+import 'package:sub_in/screens/home/home_search_radius_provider.dart';
 import 'package:sub_in/services/event_service.dart';
 
-final nearByEventsProvider = FutureProvider.autoDispose<List<Event>>((ref)async{
+final nearByEventsProvider =
+    FutureProvider.autoDispose<List<Event>>((ref) async {
   final locationAsync = ref.watch(locationProvider);
+  final radiusKm = ref.watch(homeSearchRadiusKmProvider);
   return locationAsync.when(
     data: (location) async {
       final eventService = ref.watch(eventServiceProvider);
       return await eventService.getNearbyEvents(
         latitude: location.latitude,
         longitude: location.longitude,
-        radiusKm: 10.0,
+        radiusKm: radiusKm,
       );
     },
     loading: () async => [],
     error: (err, _) => throw err,
- );});  
+  );
+});
 
 /// Provider for creating events
 final createEventProvider = Provider<CreateEventNotifier>((ref) {
@@ -55,8 +55,8 @@ class JoinEventNotifier {
 }
 
 /// Provider for single event details
-final eventDetailProvider = FutureProvider.autoDispose.family<Event, int>((ref, eventId) async {
+final eventDetailProvider =
+    FutureProvider.autoDispose.family<Event, int>((ref, eventId) async {
   final eventService = ref.watch(eventServiceProvider);
   return await eventService.getEvent(eventId);
 });
- 
