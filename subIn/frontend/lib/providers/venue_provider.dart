@@ -3,17 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/models/venue.dart';
 import 'package:sub_in/services/venue_service.dart';
 import 'package:sub_in/providers/location_provider.dart';
+import 'package:sub_in/screens/home/home_search_radius_provider.dart';
 
 // Provider for nearby venues
-final nearbyVenuesProvider = FutureProvider.autoDispose<List<Venue>>((ref) async {
+final nearbyVenuesProvider =
+    FutureProvider.autoDispose<List<Venue>>((ref) async {
   final locationAsync = ref.watch(locationProvider);
-  
+  final radiusKm = ref.watch(homeSearchRadiusKmProvider);
+
   return locationAsync.when(
     data: (location) async {
       final venueService = ref.watch(venueServiceProvider);
       return await venueService.fetchNearby(
-       location: location,
-        radiusKm: 10.0,
+        location: location,
+        radiusKm: radiusKm,
       );
     },
     loading: () async => [],
