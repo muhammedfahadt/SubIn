@@ -23,7 +23,7 @@ class _CreateVenueSheetState extends ConsumerState<CreateVenueSheet> {
   bool _saving = false;
   String? _error;
 
-  static const _allSports = ['Football', 'Cricket', 'Basketball', 'Tennis', 'Badminton'];
+  static const _allSports = ['Football', 'Cricket', 'Basketball', 'Tennis', 'Badminton','Running', 'Other'];
 
   @override
   void initState() {
