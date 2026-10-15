@@ -230,7 +230,7 @@ class _VenueMapScreenState extends ConsumerState<VenueMapScreen> {
   }
 
   Widget _buildSportFilter(String selectedSport) {
-    final sports = ['All', 'Football', 'Cricket', 'Basketball', 'Tennis', 'Badminton'];
+    final sports = ['All', 'Football', 'Cricket', 'Basketball', 'Tennis', 'Badminton', 'Running', 'Other'];
 
     return SizedBox(
       height: 50,

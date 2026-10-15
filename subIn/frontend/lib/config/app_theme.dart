@@ -112,7 +112,7 @@ class AppTheme {
     'Swimming': Color(0xFF0EA5E9),
     'Yoga': Color(0xFFF472B6),
     'Gym': Color(0xFF6366F1),
-    'Other': Color(0xFF9CA3AF),
+    'Other': Color.fromARGB(255, 70, 235, 5),
   };
 
   static ThemeData get darkTheme {
