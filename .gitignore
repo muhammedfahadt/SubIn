@@ -25,12 +25,12 @@ Desktop.ini
 *.swp
 *.swo
 *~
-.project
+
+
 .classpath
 .c9/
 *.launch
 .nbattrs
-
 # ---------- Env / Secrets — NEVER commit ----------
 # subIn/backend/app/config.py loads `.env` via pydantic-settings
 .env

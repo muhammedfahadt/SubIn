@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sub_in/config/app_theme.dart';
 import 'package:sub_in/providers/auth_provider.dart';
-import 'package:sub_in/screens/auth/login_screen.dart';
+import 'package:sub_in/widgets/auth/auth_header.dart';
+import 'package:sub_in/widgets/auth/social_auth_buttons.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -19,6 +20,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _phoneController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
@@ -31,7 +33,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
         _nameController.text.trim(),
-        phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
+        phone: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
       );
 
       if (!mounted) return;
@@ -48,58 +52,53 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.appBackground,
       appBar: AppBar(
-        title: const Text('Create Account'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: AppTheme.textPrimary,
+        leading: IconButton(
+          tooltip: 'Back',
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/landing'),
+        ),
+        title: const Text('SUBIN Select Sports'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 20),
-                Text(
-                  'Join GameOn',
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        color: AppTheme.primaryColor,
-                      ),
-                  textAlign: TextAlign.center,
+                const AuthHeader(
+                  eyebrow: 'FAST REGISTRATION',
+                  title: 'Create your account',
+                  subtitle: "You're one step closer to your next game.",
                 ),
+                const SizedBox(height: 16),
+                Text('Full Name *', style: text.titleSmall),
                 const SizedBox(height: 8),
-                Text(
-                  'Find your game, find your team.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 40),
-
-                // Full Name
                 TextFormField(
                   controller: _nameController,
                   decoration: const InputDecoration(
-                    labelText: 'Full Name',
                     prefixIcon: Icon(Icons.person_outline),
+                    hintText: 'Muhammed Fahad ',
                   ),
                   validator: (value) => (value == null || value.length < 2)
                       ? 'Name must be at least 2 characters'
                       : null,
                 ),
                 const SizedBox(height: 16),
-
+                Text('Email Address *', style: text.titleSmall),
+                const SizedBox(height: 8),
                 // Email
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: 'Email Address',
                     prefixIcon: Icon(Icons.email_outlined),
+                    hintText: 'fahad.102@gmail.com',
                   ),
                   validator: (value) {
                     if (value == null || !value.contains('@')) {
@@ -120,51 +119,63 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
+                Text('Password *', style: text.titleSmall),
+                const SizedBox(height: 8),
                 // Password
                 TextFormField(
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline),
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      tooltip:
+                          _obscurePassword ? 'Show password' : 'Hide password',
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                      ),
+                      onPressed: () => setState(
+                        () => _obscurePassword = !_obscurePassword,
+                      ),
+                    ),
                   ),
                   validator: (value) => (value == null || value.length < 6)
                       ? 'Password must be at least 6 characters'
                       : null,
                 ),
-                const SizedBox(height: 32),
-
-                // Submit Button
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _handleRegister,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
                   child: _isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text(
-                          'Create Account',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                      : const Text('Create account'),
                 ),
-                const SizedBox(height: 24),
-
-                // Login Redirect
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Expanded(child: Divider()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text('OR CONTINUE WITH', style: text.labelSmall),
+                    ),
+                    const Expanded(child: Divider()),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                const SocialAuthButtons(),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account? '),
+                    Text('Already have an account? ', style: text.bodyMedium),
                     TextButton(
-                      onPressed:(){context.go('/login');},
-                      child: const Text('Log In'),
+                      onPressed: () => context.go('/login'),
+                      child: const Text('Log in'),
                     ),
                   ],
                 ),

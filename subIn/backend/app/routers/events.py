@@ -8,6 +8,7 @@ from app.models import Event, EventParticipant, User, Venue
 from app.schemas import EventCreate, EventResponse
 from app.dependencies import get_current_user
 from app.schemas import ParticipantResponse
+from app.schemas import ParticipantResponse
 
 router = APIRouter(prefix="/events", tags=["Events"])
 
@@ -134,12 +135,14 @@ async def get_nearby_events(
         FROM events e
         JOIN users u ON e.organizer_id = u.id
         WHERE e.status::text = 'open'
+        
           AND e.start_time > NOW()
           AND ST_DWithin(
               e.location_geom::geography,
               ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
               :radius_meters
           )
+         
           -- ✅ FIX: Use CAST() instead of :: to avoid SQLAlchemy parser confusion
           AND (CAST(:sport AS TEXT) IS NULL OR e.sport::text = CAST(:sport AS TEXT))
         ORDER BY e.start_time ASC
@@ -163,6 +166,8 @@ async def get_nearby_events(
         max_p = event_dict.get("max_players") or 0
         current_p = event_dict.get("current_players") or 0
         event_dict["spots_remaining"] = max_p - current_p
+        
+
         
         events.append(EventResponse(**event_dict))
     
@@ -281,6 +286,36 @@ async def join_event(
     }
     
     return EventResponse(**response_data)
+
+
+@router.get("/{event_id}/participants", response_model=List[ParticipantResponse])
+async def get_event_participants(
+    event_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get all participants for an event"""
+    
+    query = text("""
+        SELECT 
+            ep.user_id,
+            u.full_name,
+            u.avatar_url,
+            u.skill_level::text as skill_level,
+            ep.joined_at
+        FROM event_participants ep
+        JOIN users u ON ep.user_id = u.id
+        WHERE ep.event_id = :event_id
+          AND ep.status = 'joined'
+        ORDER BY ep.joined_at ASC
+    """)
+    
+    result = await db.execute(query, {"event_id": event_id})
+    
+    participants = []
+    for row in result.mappings():
+        participants.append(ParticipantResponse(**dict(row)))
+    
+    return participants
 
 
 @router.get("/{event_id}/participants", response_model=List[ParticipantResponse])

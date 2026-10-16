@@ -6,7 +6,9 @@ import 'package:sub_in/services/auth_services.dart';
 // 1. Define the state (Keep it simple)
 class AuthState {
   final bool isLoggedIn;
-  const AuthState({required this.isLoggedIn});
+  final String? userName;
+  final int? userId;
+  const AuthState({required this.isLoggedIn, this.userName, this.userId});
 }
 
 // 2. The AsyncNotifier
@@ -16,7 +18,13 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     // Runs ONCE when the app starts. Perfect for checking existing tokens.
     final storage = ref.read(storageServiceProvider);
     final token = await storage.getToken();
-    return AuthState(isLoggedIn: token != null && token.isNotEmpty);
+    final userName = await storage.getUserName();
+    final userId = await storage.getUserId();
+    return AuthState(
+      isLoggedIn: token != null && token.isNotEmpty,
+      userName: userName,
+      userId: userId,
+    );
   }
 
   Future<void> login(String email, String password) async {
@@ -26,9 +34,12 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
      final authService = ref.read(authServiceProvider);
           await authService.login(email, password);
+      final storage = ref.read(storageServiceProvider);
+      final userName = await storage.getUserName();
+      final userId = await storage.getUserId();
 
 
-      return const AuthState(isLoggedIn: true);
+      return AuthState(isLoggedIn: true, userName: userName, userId: userId);
     });
   }
   Future<void> register(String email, String password, String name, {String? phone}) async {
@@ -37,8 +48,11 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
       final authService = ref.read(authServiceProvider);
       await authService.register(email, password, name, phone: phone);
+      final storage = ref.read(storageServiceProvider);
+      final userName = await storage.getUserName();
+      final userId = await storage.getUserId();
 
-      return const AuthState(isLoggedIn: true);
+      return AuthState(isLoggedIn: true, userName: userName, userId: userId);
     });
   }
 

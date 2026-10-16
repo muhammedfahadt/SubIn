@@ -75,11 +75,14 @@ pip-wheel-metadata/
 dist/
 build/
 develop-eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
+lib/
+!frontend/lib/
+!frontend/lib/screens/
+!frontend/lib/screens/home/
+!frontend/lib/screens/home/**
 wheels/
 pip-log.txt
 pip-delete-this-directory.txt

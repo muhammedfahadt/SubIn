@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:sub_in/config/app_theme.dart';
+import 'package:sub_in/providers/auth_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sub_in/models/event.dart';
 import 'package:sub_in/models/participant.dart';
@@ -125,9 +126,13 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
     }
 
     final event = _event!;
-    final sportColor = AppTheme.sportColors[event.sport] ?? AppTheme.primaryColor;
-    final isFull = event.spotsRemaining == 0 || event.status == 'full';
-    final isOrganizer = event.organizerId == 1; // TODO: Get current user ID
+    final sportColor = _sportColorFor(event.sport);
+    final spotsLeft =
+        event.spotsRemaining ?? (event.maxPlayers - event.currentPlayers);
+    final isFull = spotsLeft <= 0 || event.status.toLowerCase() == 'full';
+    final currentUserId = ref.watch(authNotifierProvider).value?.userId;
+    final isOrganizer =
+        currentUserId != null && event.organizerId == currentUserId;
 
     return Scaffold(
       appBar: AppBar(
@@ -572,4 +577,22 @@ FlutterMap(
       ),
     );
   }
+
+  Color _sportColorFor(String sport) {
+    // Backend sends lowercase/snake_case (e.g. "football", "table_tennis")
+    // while AppTheme.sportColors keys are Title Case. Match case-insensitively.
+    final colors = AppTheme.sportColors;
+    if (colors.containsKey(sport)) return colors[sport]!;
+    final lower = sport.toLowerCase();
+    for (final entry in colors.entries) {
+      final keyLower = entry.key.toLowerCase();
+      if (keyLower == lower ||
+          keyLower.replaceAll(' ', '_') == lower ||
+          keyLower.replaceAll('_', ' ') == lower) {
+        return entry.value;
+      }
+    }
+    return AppTheme.primaryColor;
+  }
 }
+
