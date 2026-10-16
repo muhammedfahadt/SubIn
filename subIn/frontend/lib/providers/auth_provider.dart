@@ -7,7 +7,8 @@ import 'package:sub_in/services/auth_services.dart';
 class AuthState {
   final bool isLoggedIn;
   final String? userName;
-  const AuthState({required this.isLoggedIn, this.userName});
+  final int? userId;
+  const AuthState({required this.isLoggedIn, this.userName, this.userId});
 }
 
 // 2. The AsyncNotifier
@@ -18,9 +19,11 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     final storage = ref.read(storageServiceProvider);
     final token = await storage.getToken();
     final userName = await storage.getUserName();
+    final userId = await storage.getUserId();
     return AuthState(
       isLoggedIn: token != null && token.isNotEmpty,
       userName: userName,
+      userId: userId,
     );
   }
 
@@ -31,10 +34,12 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
      final authService = ref.read(authServiceProvider);
           await authService.login(email, password);
-      final userName = await ref.read(storageServiceProvider).getUserName();
+      final storage = ref.read(storageServiceProvider);
+      final userName = await storage.getUserName();
+      final userId = await storage.getUserId();
 
 
-      return AuthState(isLoggedIn: true, userName: userName);
+      return AuthState(isLoggedIn: true, userName: userName, userId: userId);
     });
   }
   Future<void> register(String email, String password, String name, {String? phone}) async {
@@ -43,9 +48,11 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = await AsyncValue.guard(() async {
       final authService = ref.read(authServiceProvider);
       await authService.register(email, password, name, phone: phone);
-      final userName = await ref.read(storageServiceProvider).getUserName();
+      final storage = ref.read(storageServiceProvider);
+      final userName = await storage.getUserName();
+      final userId = await storage.getUserId();
 
-      return AuthState(isLoggedIn: true, userName: userName);
+      return AuthState(isLoggedIn: true, userName: userName, userId: userId);
     });
   }
 

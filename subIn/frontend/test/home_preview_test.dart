@@ -61,7 +61,7 @@ void main() {
     expect(find.text('Central Turf'), findsOneWidget);
     expect(find.text('See all'), findsNWidgets(2));
     expect(find.text('Ready to play, Alex?'), findsOneWidget);
-    expect(find.text('Create Match'), findsOneWidget);
+    expect(find.text('Host an Event'), findsOneWidget);
     expect(find.text('Home'), findsWidgets);
   });
 
