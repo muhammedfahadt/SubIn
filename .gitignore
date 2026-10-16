@@ -25,13 +25,12 @@ Desktop.ini
 *.swp
 *.swo
 *~
-.project
-.agents/
+
+
 .classpath
 .c9/
 *.launch
 .nbattrs
-brag-output-2026-10-12-013126/
 # ---------- Env / Secrets — NEVER commit ----------
 # subIn/backend/app/config.py loads `.env` via pydantic-settings
 .env

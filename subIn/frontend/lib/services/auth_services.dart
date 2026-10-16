@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:core';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sub_in/logging/app_logger.dart';
@@ -128,14 +129,28 @@ class AuthService {
     await _storageService.clearToken();
   }
 
-  Future<void> _saveUserName(dynamic user) async {
-    if (user is Map && user['full_name'] is String) {
-      final name = (user['full_name'] as String).trim();
-      if (name.isNotEmpty) {
-        await _storageService.saveUserName(name);
+  Future<void> _saveUser(dynamic user) async {
+    if (user is Map) {
+      if (user['full_name'] is String) {
+        final name = (user['full_name'] as String).trim();
+        if (name.isNotEmpty) {
+          await _storageService.saveUserName(name);
+        }
+      }
+      final rawId = user['id'];
+      if (rawId is int) {
+        await _storageService.saveUserId(rawId);
+      } else if (rawId is String) {
+        final parsed = int.tryParse(rawId);
+        if (parsed != null) {
+          await _storageService.saveUserId(parsed);
+        }
       }
     }
   }
+
+  // Kept for backward compatibility with any existing callers/tests.
+  Future<void> _saveUserName(dynamic user) => _saveUser(user);
 
   Future<bool> isAuthenticated() async {
     final token = await _storageService.getToken();

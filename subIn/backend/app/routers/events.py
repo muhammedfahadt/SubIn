@@ -135,7 +135,7 @@ async def get_nearby_events(
         FROM events e
         JOIN users u ON e.organizer_id = u.id
         WHERE e.status::text = 'open'
-        WHERE e.status::text = 'open'
+        
           AND e.start_time > NOW()
           AND ST_DWithin(
               e.location_geom::geography,
@@ -168,10 +168,7 @@ async def get_nearby_events(
         current_p = event_dict.get("current_players") or 0
         event_dict["spots_remaining"] = max_p - current_p
         
-        # ✅ Safe calculation to prevent TypeError if DB has NULL values
-        max_p = event_dict.get("max_players") or 0
-        current_p = event_dict.get("current_players") or 0
-        event_dict["spots_remaining"] = max_p - current_p
+
         
         events.append(EventResponse(**event_dict))
     

@@ -45,9 +45,7 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             tooltip: 'Open venues',
             icon: const Icon(Icons.add_location_alt_outlined),
-            onPressed: () {
-              context.go('/venues');
-            },
+            onPressed: () => context.go('/venues'),
           ),
           IconButton(
             tooltip: 'Create event',
@@ -64,9 +62,7 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.event_available),
             tooltip: 'Open event details',
-            onPressed: () {
-              context.push('/events/1');
-            },
+            onPressed: () => context.push('/events/1'),
           ),
         ],
       ),
