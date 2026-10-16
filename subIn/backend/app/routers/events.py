@@ -142,8 +142,7 @@ async def get_nearby_events(
               ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
               :radius_meters
           )
-          -- ✅ FIX: Use CAST() instead of :: to avoid SQLAlchemy parser confusion
-          AND (CAST(:sport AS TEXT) IS NULL OR e.sport::text = CAST(:sport AS TEXT))
+         
           -- ✅ FIX: Use CAST() instead of :: to avoid SQLAlchemy parser confusion
           AND (CAST(:sport AS TEXT) IS NULL OR e.sport::text = CAST(:sport AS TEXT))
         ORDER BY e.start_time ASC
