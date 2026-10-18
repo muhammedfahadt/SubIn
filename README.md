@@ -3,7 +3,7 @@
 
 ## CS50 Final Project — Video Demo
 
-> 🎥 **Demo video:** `https://www.youtube.com/watch?v=g96hQKWOjS4` 
+> 🎥 **Demo video:** [https://www.youtube.com/watch?v=g96hQKWOjS4](https://www.youtube.com/watch?v=g96hQKWOjS4)
 
 ## Overview
 
