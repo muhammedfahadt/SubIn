@@ -3,7 +3,7 @@
 
 ## CS50 Final Project — Video Demo
 
-> 🎥 **Demo video:** `[PASTE YOUR YOUTUBE URL HERE]` *(placeholder — replace with your final CS50 demo link before submission)*
+> 🎥 **Demo video:** `https://www.youtube.com/watch?v=g96hQKWOjS4` 
 
 ## Overview
 
